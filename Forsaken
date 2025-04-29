@@ -1,0 +1,15 @@
+local UIS = game:GetService("UserInputService")
+local enabled = false
+local camera = game.Workspace.CurrentCamera
+task.wait()
+UIS.InputBegan:Connect(function(input, p)
+	if input.UserInputType == Enum.UserInputType.MouseButton3 and game.Players.LocalPlayer.Character.Parent.Name == "Survivors" then
+        enabled = not enabled
+        if enabled and game.Workspace.Players.Killers:GetChildren() ~= 0 then
+            local Character = game.Workspace.Players.Killers:FindFirstChildOfClass("Model")
+            while Character.Humanoid.Health > 0 and enabled and task.wait() do 
+                camera.CFrame = CFrame.lookAt(camera.CFrame.Position, Character.Head.CFrame.Position)
+            end
+        end
+	end
+end)
