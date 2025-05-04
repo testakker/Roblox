@@ -1,0 +1,65 @@
+print(game.GameId)
+
+if game.GameId == 1119466531 then
+    while task.wait() do
+        for i,v in workspace.orbFolder:GetChildren() do
+            for ii, vv in v:GetChildren() do
+                if vv.Name == "Gem" then
+                    firetouchinterest(game.Players.LocalPlayer.Character.HumanoidRootPart, vv.outerGem, 0)
+                else
+                    firetouchinterest(game.Players.LocalPlayer.Character.HumanoidRootPart, vv.outerOrb, 0)
+                end
+            end
+        end
+    end
+
+elseif game.GameId == 3405618667 then
+    while task.wait() do
+        for i,v in workspace["Zone Currencies"]:GetChildren() do
+            if v:FindFirstChild("Hitbox") then
+                firetouchinterest(game.Players.LocalPlayer.Character.HumanoidRootPart, v.Hitbox, 0)
+            end
+        end
+    end
+
+elseif game.GameId == 6331902150 then
+    local UIS = game:GetService("UserInputService")
+    local enabled = false
+    local camera = game.Workspace.CurrentCamera
+    task.spawn(function()
+        while task.wait(0.1) do
+                for i,v in game.Players.LocalPlayer.PlayerGui.TemporaryUI:GetChildren() do
+                        if v.Name == "1x1x1x1Popup" then
+                            v.Position = UDim2.new(0.5,0,0.5,0)
+                            mousemoveabs(-1000, -1000)
+                            mousemoveabs(350, 170)
+                            mouse1click()
+                            task.wait(0.01)
+                        end
+                    end 
+        end
+    end)
+    UIS.InputBegan:Connect(function(input, p)
+        if input.UserInputType == Enum.UserInputType.MouseButton3 and game.Players.LocalPlayer.Character.Parent.Name == "Survivors" then
+            enabled = not enabled
+            if enabled and game.Workspace.Players.Killers:GetChildren() ~= 0 then
+                local Character = game.Workspace.Players.Killers:FindFirstChildOfClass("Model")
+                while Character.Humanoid.Health > 0 and enabled and task.wait() do
+
+                    camera.CFrame = CFrame.lookAt(camera.CFrame.Position, Character.Head.CFrame.Position)
+                    
+                end
+            end
+        end
+    end)
+
+elseif game.GameId == 2807944996 then
+    while task.wait() do
+        for i,v in workspace.Map.Stages.TerrainWalls:GetChildren() do
+            for ii, vv in v:GetChildren() do
+                firetouchinterest(game.Players.LocalPlayer.Character.HumanoidRootPart, vv, 0)
+            end
+        end
+    end
+
+end
