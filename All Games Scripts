@@ -27,11 +27,12 @@ elseif game.GameId == 6331902150 then
     local enabled = false
     local camera = game.Workspace.CurrentCamera
     game.Players.LocalPlayer.PlayerGui.TemporaryUI.ChildAdded:Connect(function(child)
-    if child.Name == "1x1x1x1Popup" then
+        if child.Name == "1x1x1x1Popup" then
             child.Position = UDim2.new(0.5, 0, 0.5, 0)
             mousemoveabs(-1000, -1000)
             mousemoveabs(350, 170)
             mouse1click()
+            task.wait(0.01)
         end
     end)
     UIS.InputBegan:Connect(function(input, p)
