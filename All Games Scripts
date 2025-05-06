@@ -1,11 +1,19 @@
 print(game.GameId)
 
 if game.Players.LocalPlayer.PlayerGui:FindFirstChild("Test_"..game.Players.LocalPlayer.Name) then 
-    game.Players.LocalPlayer.PlayerGui:FindFirstChild("Test_"..game.Players.LocalPlayer.Name):Destroy() 
+    game.Players.LocalPlayer.PlayerGui:FindFirstChild("Test_"..game.Players.LocalPlayer.Name):Destroy()
+    game:GetService("StarterGui"):SetCore("SendNotification", {
+        Title = "testakker scripts",
+        Text = "Previous script disabled, loading new one",
+    })
+    task.wait(2)
 end
 local ui = Instance.new("ScreenGui", game.Players.LocalPlayer.PlayerGui)
 ui.Name = "Test_"..game.Players.LocalPlayer.Name
-
+game:GetService("StarterGui"):SetCore("SendNotification", {
+    Title = "testakker scripts",
+    Text = "New script activated",
+})
 script.Parent = ui
 
 if game.GameId == 1119466531 then
