@@ -4,9 +4,9 @@ if game.Players.LocalPlayer.PlayerGui:FindFirstChild("Test_"..game.Players.Local
     game.Players.LocalPlayer.PlayerGui:FindFirstChild("Test_"..game.Players.LocalPlayer.Name):Destroy()
     game:GetService("StarterGui"):SetCore("SendNotification", {
         Title = "testakker scripts",
-        Text = "Previous script disabled, loading new one",
+        Text = "Previous script disabled, loading new one..",
     })
-    task.wait(2)
+    task.wait(3)
 end
 local ui = Instance.new("ScreenGui", game.Players.LocalPlayer.PlayerGui)
 ui.Name = "Test_"..game.Players.LocalPlayer.Name
