@@ -1,77 +1,172 @@
 print(game.GameId)
 
-if game.Players.LocalPlayer.PlayerGui:FindFirstChild("Test_"..game.Players.LocalPlayer.Name) then 
-    game.Players.LocalPlayer.PlayerGui:FindFirstChild("Test_"..game.Players.LocalPlayer.Name):Destroy()
-    game:GetService("StarterGui"):SetCore("SendNotification", {
-        Title = "testakker scripts",
-        Text = "Previous script disabled, loading new one..",
-    })
-    task.wait(3)
-end
-local ui = Instance.new("ScreenGui", game.Players.LocalPlayer.PlayerGui)
-ui.Name = "Test_"..game.Players.LocalPlayer.Name
-game:GetService("StarterGui"):SetCore("SendNotification", {
-    Title = "testakker scripts",
-    Text = "New script activated",
-})
-script.Parent = ui
+local character = game:GetService("Players").LocalPlayer.Character
+local Rayfield = loadstring(game:HttpGet('https://raw.githubusercontent.com/testakker/Roblox/refs/heads/main/Rayfield'))()
+local Window = Rayfield:CreateWindow({
+    Name = "testakker scripts",
+    Icon = 16987271839, -- Icon in Topbar. Can use Lucide Icons (string) or Roblox Image (number). 0 to use no icon (default).
+    LoadingTitle = "testakker scripts",
+    LoadingSubtitle = "by testakker_2",
+    Theme = "DarkBlue", -- Check https://docs.sirius.menu/rayfield/configuration/themes
+ 
+    DisableRayfieldPrompts = false,
+    DisableBuildWarnings = false, -- Prevents Rayfield from warning when the script has a version mismatch with the interface
+ 
+    ConfigurationSaving = {
+       Enabled = true,
+       FolderName = nil, -- Create a custom folder for your hub/game
+       FileName = "Big Hub"
+    },
+ 
+    Discord = {
+       Enabled = false, -- Prompt the user to join your Discord server if their executor supports it
+       Invite = "noinvitelink", -- The Discord invite code, do not include discord.gg/. E.g. discord.gg/ ABCD would be ABCD
+       RememberJoins = true -- Set this to false to make them join the discord every time they load it up
+    },
+ 
+    KeySystem = false, -- Set this to true to use our key system
+    KeySettings = {
+       Title = "Untitled",
+       Subtitle = "Key System",
+       Note = "No method of obtaining the key is provided", -- Use this to tell the user how to get a key
+       FileName = "Key", -- It is recommended to use something unique as other scripts using Rayfield may overwrite your key file
+       SaveKey = true, -- The user's key will be saved, but if you change the key, they will be unable to use your script
+       GrabKeyFromSite = false, -- If this is true, set Key below to the RAW site you would like Rayfield to get the key from
+       Key = {"Hello"} -- List of keys that will be accepted by the system, can be RAW file links (pastebin, github etc) or simple strings ("hello","key22")
+    }
+ })
+ local PlayerTab = Window:CreateTab("Player", 4483362458) -- Title, Image
 
-if game.GameId == 1119466531 then
-    while task.wait() do
-        for i,v in workspace.orbFolder:GetChildren() do
-            for ii, vv in v:GetChildren() do
-                if vv.Name == "Gem" then
-                    firetouchinterest(game.Players.LocalPlayer.Character.HumanoidRootPart, vv.outerGem, 0)
-                else
-                    firetouchinterest(game.Players.LocalPlayer.Character.HumanoidRootPart, vv.outerOrb, 0)
+ if character.Humanoid.UseJumpPower == true then
+    local Slider = PlayerTab:CreateSlider({
+        Name = "Jump Power",
+        Range = {50, 3472},
+        Increment = 1,
+        Suffix = "Power",
+        CurrentValue = 50,
+        Flag = "Slider2", -- A flag is the identifier for the configuration file, make sure every element has a different flag if you're using configuration saving to ensure no overlaps
+        Callback = function(Value)
+            character.Humanoid.JumpPower = Value
+        end,
+     })
+ else
+    local Slider = PlayerTab:CreateSlider({
+        Name = "Jump Height",
+        Range = {7.2, 500},
+        Increment = 1,
+        Suffix = "Height",
+        CurrentValue = 7.2,
+        Flag = "Slider2", -- A flag is the identifier for the configuration file, make sure every element has a different flag if you're using configuration saving to ensure no overlaps
+        Callback = function(Value)
+            character.Humanoid.JumpHeight = Value
+        end,
+     })
+ end
+
+ if game.GameId == 1119466531 then
+    local Toggle = PlayerTab:CreateToggle({
+        Name = "Touch every orb",
+        CurrentValue = false,
+        Flag = "Toggle1", -- A flag is the identifier for the configuration file, make sure every element has a different flag if you're using configuration saving to ensure no overlaps
+        Callback = function(Value)
+            CurrentValue = Value
+            while CurrentValue == true and task.wait() do
+                for i,v in workspace.orbFolder:GetChildren() do
+                    for ii, vv in v:GetChildren() do
+                        if vv.Name == "Gem" then
+                            firetouchinterest(character.HumanoidRootPart, vv.outerGem, 0)
+                        else
+                            firetouchinterest(character.HumanoidRootPart, vv.outerOrb, 0)
+                        end
+                    end
                 end
             end
-        end
-    end
-
-elseif game.GameId == 3405618667 then
-    while task.wait() do
-        for i,v in workspace["Zone Currencies"]:GetChildren() do
-            if v:FindFirstChild("Hitbox") then
-                firetouchinterest(game.Players.LocalPlayer.Character.HumanoidRootPart, v.Hitbox, 0)
+        end,
+     })
+     local Toggle = PlayerTab:CreateToggle({
+        Name = "Touch every Hoop",
+        CurrentValue = false,
+        Flag = "Toggle2", -- A flag is the identifier for the configuration file, make sure every element has a different flag if you're using configuration saving to ensure no overlaps
+        Callback = function(Value)
+            CurrentValue = Value
+            while CurrentValue == true and task.wait() do
+                for i,v in workspace.Hoops:GetChildren() do
+                    firetouchinterest(character.HumanoidRootPart, v, 0)
+                end
             end
-        end
-    end
+        end,
+     })
 
+      local Slider = PlayerTab:CreateSlider({
+    Name = "Walk Speed",
+    Range = {1, 4000},
+    Increment = 1,
+    Suffix = "Speed",
+    CurrentValue = 1,
+    Flag = "Slider1", -- A flag is the identifier for the configuration file, make sure every element has a different flag if you're using configuration saving to ensure no overlaps
+    Callback = function(Value)
+        character.Humanoid.WalkSpeed = Value
+    end,
+ })
 elseif game.GameId == 6331902150 then
-    local UIS = game:GetService("UserInputService")
-    local enabled = false
-    local camera = game.Workspace.CurrentCamera
-    game.Players.LocalPlayer.PlayerGui.TemporaryUI.ChildAdded:Connect(function(child)
-        if child.Name == "1x1x1x1Popup" then
-            child.Position = UDim2.new(0.5, 0, 0.5, 0)
-            mousemoveabs(-1000, -1000)
-            mousemoveabs(350, 170)
-            --mouse1click()
-            task.wait(0.01)
-        end
-    end)
-    UIS.InputBegan:Connect(function(input, p)
-        if input.UserInputType == Enum.UserInputType.MouseButton3 and game.Players.LocalPlayer.Character.Parent.Name == "Survivors" then
-            enabled = not enabled
-            if enabled and game.Workspace.Players.Killers:GetChildren() ~= 0 then
-                local Character = game.Workspace.Players.Killers:FindFirstChildOfClass("Model")
-                while Character.Humanoid.Health > 0 and enabled and task.wait() do
+    local ItemsTab = Window:CreateTab("Items", 8915667153) -- Title, Image
+    local KillerTab = Window:CreateTab("Killer", 949752425) -- Title, Image
+    local SurvivorTab = Window:CreateTab("Survivor", 15571995199) -- Title, Image
 
-                    camera.CFrame = CFrame.lookAt(camera.CFrame.Position, Character.Head.CFrame.Position)
-                    
+     local Slider = PlayerTab:CreateSlider({
+        Name = "Walk Speed",
+        Range = {1, 100},
+        Increment = 1,
+        Suffix = "Speed",
+        CurrentValue = 1,
+        Flag = "Slider1", -- A flag is the identifier for the configuration file, make sure every element has a different flag if you're using configuration saving to ensure no overlaps
+        Callback = function(Value)
+            game:GetService("Players").LocalPlayer.Character.Humanoid:SetAttribute("BaseSpeed",Value)
+        end,
+    })
+
+    local Toggle = ItemsTab:CreateToggle({
+        Name = "Hightlight items",
+        CurrentValue = false,
+        Flag = "Toggle1", -- A flag is the identifier for the configuration file, make sure every element has a different flag if you're using configuration saving to ensure no overlaps
+        Callback = function(Value)
+            CurrentValue = Value
+            while CurrentValue == true and task.wait(1) do
+                for i,v in workspace.Map.Ingame:GetChildren() do
+                    if v:IsA("Tool") and not v:FindFirstChildOfClass("Highlight") then 
+                        local light = Instance.new("Highlight", v)
+                        light.FillTransparency = 1
+                        --[[if v.Name == "BloxyCola"
+                            light.OutlineColor = Color3.fromRGB(170,85,0)
+                        end--]]
+                    end
                 end
             end
-        end
-    end)
+        end,
+     })
 
-elseif game.GameId == 2807944996 then
-    while task.wait() do
-        for i,v in workspace.Map.Stages.TerrainWalls:GetChildren() do
-            for ii, vv in v:GetChildren() do
-                firetouchinterest(game.Players.LocalPlayer.Character.HumanoidRootPart, vv, 0)
+     local Toggle = SurvivorTab:CreateToggle({
+        Name = "Closes 1x1x1x1's popup (a little bit buggy)",
+        CurrentValue = false,
+        Flag = "Toggle2", -- A flag is the identifier for the configuration file, make sure every element has a different flag if you're using configuration saving to ensure no overlaps
+        Callback = function(Value)
+            CurrentValue = Value
+        task.spawn(function()
+            while task.wait() and CurrentValue == true do
+                for i,v in game.Players.LocalPlayer.PlayerGui.TemporaryUI:GetChildren() do
+                    if v.Name == "1x1x1x1Popup" then
+                        v.Position = UDim2.new(0.5,0,0.5,0)
+                        mousemoveabs(-1000, -1000)
+                        mousemoveabs(350, 170)
+                        mouse1click()
+                        task.wait(0.01)
+                    end
+                end 
             end
-        end
-    end
+        end)
 
-end
+        end,
+     })
+
+
+ end
