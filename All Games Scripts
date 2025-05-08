@@ -179,22 +179,14 @@ elseif game.GameId == 6331902150 then
         Flag = "Toggle2", -- A flag is the identifier for the configuration file, make sure every element has a different flag if you're using configuration saving to ensure no overlaps
         Callback = function(Value)
             CurrentValue = Value
-        task.spawn(function()
-            while task.wait() do
                 if CurrentValue == true then
-                    if workspace.Players.Killers:FindFirstChildOfClass("Model") then
-                        local light = Instance.new("Highlight", workspace.Players.Killers:FindFirstChildOfClass("Model"))
+                        local light = Instance.new("Highlight", workspace.Players.Killers)
                         light.Name = "Kek"
                         light.FillTransparency = 0.3
                         light.OutlineColor = Color3.fromRGB(193,90,99)
-                    end
                 else
-                    if workspace.Players.Killers:FindFirstChildOfClass("Model") then
-                        workspace.Players.Killers:FindFirstChildOfClass("Model"):FindFirstChild("Kek"):Destroy()
-                    end
+                    workspace.Players.Killers:FindFirstChild("Kek"):Destroy()
                 end
-            end
-        end)
         end,
      })
 
@@ -208,26 +200,14 @@ elseif game.GameId == 6331902150 then
         Flag = "Toggle1", -- A flag is the identifier for the configuration file, make sure every element has a different flag if you're using configuration saving to ensure no overlaps
         Callback = function(Value)
             CurrentValue = Value
-            task.spawn(function()
-                while task.wait() do
-                    if CurrentValue == true then
-                        for i, v in workspace.Players.Survivors:GetChildren() do 
-                            if v and v:FindFirstChild("Humanoid") and v.Humanoid.Health > 0 then
-                                local light = Instance.new("Highlight", v)
-                                light.Name = "Kek"
-                                light.FillTransparency = 0.3
-                                light.OutlineColor = Color3.fromRGB(193,90,99)
-                            end
-                        end
-                    else
-                        for i, v in workspace.Players.Survivors:GetChildren() do 
-                            if v and v:FindFirstChild("Humanoid") and v.Humanoid.Health > 0 then
-                                v:FindFirstChild("Kek"):Destroy()
-                            end
-                        end
-                    end
-                end
-            end)
+            if CurrentValue == true then
+                local light = Instance.new("Highlight", workspace.Players.Survivors)
+                light.Name = "Kek"
+                light.FillTransparency = 0.3
+                light.OutlineColor = Color3.fromRGB(193,90,99)
+            else
+                workspace.Players.Survivors:FindFirstChild("Kek"):Destroy()
+            end
         end,
      })
 
