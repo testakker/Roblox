@@ -46,7 +46,7 @@ local Window = Rayfield:CreateWindow({
         CurrentValue = 50,
         Flag = "Slider2", -- A flag is the identifier for the configuration file, make sure every element has a different flag if you're using configuration saving to ensure no overlaps
         Callback = function(Value)
-            character.Humanoid.JumpPower = Value
+            game:GetService("Players").LocalPlayer.Character.Humanoid.JumpPower = Value
         end,
      })
  else
@@ -58,7 +58,7 @@ local Window = Rayfield:CreateWindow({
         CurrentValue = 7.2,
         Flag = "Slider2", -- A flag is the identifier for the configuration file, make sure every element has a different flag if you're using configuration saving to ensure no overlaps
         Callback = function(Value)
-            character.Humanoid.JumpHeight = Value
+            game:GetService("Players").LocalPlayer.Character.Humanoid.JumpHeight = Value
         end,
      })
  end
