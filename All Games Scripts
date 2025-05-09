@@ -38,28 +38,30 @@ local Window = Rayfield:CreateWindow({
  local PlayerTab = Window:CreateTab("Player", 4483362458) -- Title, Image
 
  if game:GetService("Players").LocalPlayer.Character then
-    local Slider = PlayerTab:CreateSlider({
+    local JumpPowerSlider = PlayerTab:CreateSlider({
         Name = "Jump Power",
         Range = {50, 3472},
         Increment = 1,
-        Suffix = "Power",
+        Suffix = "Jump Power",
         CurrentValue = 50,
-        Flag = "Slider2", -- A flag is the identifier for the configuration file, make sure every element has a different flag if you're using configuration saving to ensure no overlaps
+        Flag = "Slider1", -- A flag is the identifier for the configuration file, make sure every element has a different flag if you're using configuration saving to ensure no overlaps
         Callback = function(Value)
             game:GetService("Players").LocalPlayer.Character.Humanoid.JumpPower = Value
         end,
      })
-     local Slider = PlayerTab:CreateSlider({
+     JumpPowerSlider:Set(game:GetService("Players").LocalPlayer.Character.Humanoid.JumpPower)
+     local JumpHeightSlider = PlayerTab:CreateSlider({
         Name = "Jump Height",
         Range = {7.2, 500},
         Increment = 1,
-        Suffix = "Height",
+        Suffix = "Jump Height",
         CurrentValue = 7.2,
-        Flag = "Slider12", -- A flag is the identifier for the configuration file, make sure every element has a different flag if you're using configuration saving to ensure no overlaps
+        Flag = "Slider2", -- A flag is the identifier for the configuration file, make sure every element has a different flag if you're using configuration saving to ensure no overlaps
         Callback = function(Value)
             game:GetService("Players").LocalPlayer.Character.Humanoid.JumpHeight = Value
         end,
      })
+      JumpHeightSlider:Set(game:GetService("Players").LocalPlayer.Character.Humanoid.JumpHeight)
  end
 
  if game.GameId == 1119466531 then
@@ -102,23 +104,66 @@ local Window = Rayfield:CreateWindow({
     Increment = 1,
     Suffix = "Speed",
     CurrentValue = 1,
-    Flag = "Slider1", -- A flag is the identifier for the configuration file, make sure every element has a different flag if you're using configuration saving to ensure no overlaps
+    Flag = "Slider3", -- A flag is the identifier for the configuration file, make sure every element has a different flag if you're using configuration saving to ensure no overlaps
     Callback = function(Value)
         game:GetService("Players").LocalPlayer.Character.Humanoid.WalkSpeed = Value
     end,
  })
 elseif game.GameId == 6331902150 then
+
+
     local ItemsTab = Window:CreateTab("Items", 8915667153) -- Title, Image
     local KillerTab = Window:CreateTab("Killer", 949752425) -- Title, Image
     local SurvivorTab = Window:CreateTab("Survivor", 15571995199) -- Title, Image
 
-     local Slider = PlayerTab:CreateSlider({
+    local namesToModify = {
+        CorruptEnergy = true,
+        DigitalFootprint = true,
+        ["404Error"] = true,
+        MassInfection = true,
+        Entanglement = true,
+        UnstableEye = true,
+        RejuvenateTheRotten = true,
+        ENRAGED = true,
+        BeheadAbility = true,
+        HinderedMovement = true,
+        
+    }
+
+    local names2 = {
+        Guest1337Charge = true,
+        GuestBlocking = true,
+    }
+
+    local Multipliers = {
+        Guest1337Charge = 5,
+        GuestBlocking = 1,
+        SlowedStatus = 1,
+        PunchAbility = 1,
+        MassInfection = 3,
+        Entanglement = 1.5,
+        UnstableEye = 0.01,
+        ["404Error"] = 1,
+        RejuvenateTheRotten = 0.01,
+        ENRAGED = 2,
+        DigitalFootprint = 1,
+        CorruptEnergy = 1,
+        BeheadAbility = 1.5,
+        HinderedMovement = 2,
+        TwoTimeStab = 1.2,
+        TwoTimeCrouching = 1.5,
+        SpeedStatus = 1.6,
+        StunningKiller = 1,
+
+    }
+
+     local SpeedSlider11 = PlayerTab:CreateSlider({
         Name = "Walk Speed",
         Range = {1, 100},
         Increment = 1,
         Suffix = "Speed",
         CurrentValue = 1,
-        Flag = "Slider1", -- A flag is the identifier for the configuration file, make sure every element has a different flag if you're using configuration saving to ensure no overlaps
+        Flag = "Slider3", -- A flag is the identifier for the configuration file, make sure every element has a different flag if you're using configuration saving to ensure no overlaps
         Callback = function(Value)
             while task.wait() do
                 game:GetService("Players").LocalPlayer.Character.Humanoid:SetAttribute("BaseSpeed",Value)
@@ -126,6 +171,8 @@ elseif game.GameId == 6331902150 then
         end,
     })
 
+    --SpeedSlider11:Set(game:GetService("Players").LocalPlayer.Character.Humanoid:GetAttribute("BaseSpeed"))
+    
     local Toggle = ItemsTab:CreateToggle({
         Name = "Hightlight items",
         CurrentValue = false,
@@ -189,7 +236,7 @@ elseif game.GameId == 6331902150 then
                         light.OutlineColor = Color3.fromRGB(193,90,99)
                     end
                 else
-                    if workspace.Players.Killers:FindFirstChildOfClass("Model") then
+                    if workspace.Players.Killers:FindFirstChildOfClass("Model") and workspace.Players.Killers:FindFirstChildOfClass("Model"):FindFirstChild("Kek") then
                         workspace.Players.Killers:FindFirstChildOfClass("Model"):FindFirstChild("Kek"):Destroy()
                     end
                 end
@@ -197,8 +244,6 @@ elseif game.GameId == 6331902150 then
         end)
         end,
      })
-
-
 
 
 
@@ -231,16 +276,63 @@ elseif game.GameId == 6331902150 then
         end,
      })
 
+     
+    local Toggle = PlayerTab:CreateToggle({
+        Name = "removing stun and buffind speed for some characters",
+        CurrentValue = false,
+        Flag = "Toggle1", -- A flag is the identifier for the configuration file, make sure every element has a different flag if you're using configuration saving to ensure no overlaps
+        Callback = function(Value)
+            CurrentValue = Value
+            _EnabledModifier = CurrentValue
+        end,
+    })
+
+     task.spawn(function()
+        while task.wait(.01) do
+            if game.Players.LocalPlayer.Character.Parent == workspace.Players.Survivors and _EnabledModifier == true then
+                workspace.Players.Survivors:FindFirstChildOfClass("Model").SpeedMultipliers.ChildAdded:Connect(function(child)
+                    if names2[child.Name] then
+                        while child and task.wait() and _EnabledModifier == true do
+                            child.Value = Multipliers[child.Name]
+                        end 
+                    end
+                end)
+            elseif game.Players.LocalPlayer.Character.Parent == workspace.Players.Killers and _EnabledModifier == true then
+                workspace.Players.Killers:FindFirstChildOfClass("Model").SpeedMultipliers.ChildAdded:Connect(function(child)
+                    if namesToModify[child.Name] then
+                        while child and task.wait() and _EnabledModifier == true do 
+                            child.Value = Multipliers[child.Name]
+                        end
+                    end
+                end)
+            end
+        end
+    end)
+
+
+       --[[  local Slider = KillerTab:CreateSlider({
+        Name = "Walk Speed",
+        Range = {1, 100},
+        Increment = 1,
+        Suffix = "Speed",
+        CurrentValue = 1,
+        Flag = "Slider1", -- A flag is the identifier for the configuration file, make sure every element has a different flag if you're using configuration saving to ensure no overlaps
+        Callback = function(Value)
+            game:GetService("Players").LocalPlayer.Character.Humanoid.WalkSpeed = Value
+        end,
+    })--]]
+
  else
-    local Slider = PlayerTab:CreateSlider({
+    local SpeedSlider = PlayerTab:CreateSlider({
     Name = "Walk Speed",
     Range = {1, 100},
     Increment = 1,
     Suffix = "Speed",
     CurrentValue = 1,
-    Flag = "Slider1", -- A flag is the identifier for the configuration file, make sure every element has a different flag if you're using configuration saving to ensure no overlaps
+    Flag = "Slider3", -- A flag is the identifier for the configuration file, make sure every element has a different flag if you're using configuration saving to ensure no overlaps
     Callback = function(Value)
         game:GetService("Players").LocalPlayer.Character.Humanoid.WalkSpeed = Value
     end,
  })
+ SpeedSlider:Set(game:GetService("Players").LocalPlayer.Character.Humanoid.WalkSpeed)
  end
