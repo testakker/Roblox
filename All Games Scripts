@@ -286,25 +286,29 @@ elseif game.GameId == 6331902150 then
             _EnabledModifier = CurrentValue
         end,
     })
-
+    local connection
+    local connection2
      task.spawn(function()
         while task.wait(.01) do
             if game.Players.LocalPlayer.Character.Parent == workspace.Players.Survivors and _EnabledModifier == true then
-                workspace.Players.Survivors:FindFirstChildOfClass("Model").SpeedMultipliers.ChildAdded:Connect(function(child)
+    connection = workspace.Players.Survivors:FindFirstChildOfClass("Model").SpeedMultipliers.ChildAdded:Connect(function(child)
                     if names2[child.Name] then
-                        while child and task.wait() and _EnabledModifier == true do
+                        while child and task.wait() do
                             child.Value = Multipliers[child.Name]
                         end 
                     end
                 end)
             elseif game.Players.LocalPlayer.Character.Parent == workspace.Players.Killers and _EnabledModifier == true then
-                workspace.Players.Killers:FindFirstChildOfClass("Model").SpeedMultipliers.ChildAdded:Connect(function(child)
+    connection2 = workspace.Players.Killers:FindFirstChildOfClass("Model").SpeedMultipliers.ChildAdded:Connect(function(child)
                     if namesToModify[child.Name] then
-                        while child and task.wait() and _EnabledModifier == true do 
+                        while child and task.wait() do 
                             child.Value = Multipliers[child.Name]
                         end
                     end
                 end)
+            elseif _EnabledModifier == false then
+                if connection then connection:Disconnect() end
+                if connection2 then connection2:Disconnect() end
             end
         end
     end)
