@@ -190,7 +190,9 @@ elseif game.GameId == 6331902150 then
                                 light.OutlineColor = Color3.fromRGB(170,85,0)
                             end--]]
                         end
-                    end 
+                    end
+                else
+                    return 
                 end
             end
         end,
@@ -202,21 +204,23 @@ elseif game.GameId == 6331902150 then
         Flag = "Toggle1", -- A flag is the identifier for the configuration file, make sure every element has a different flag if you're using configuration saving to ensure no overlaps
         Callback = function(Value)
             CurrentValue = Value
-        task.spawn(function()
-            while task.wait() do
-                if CurrentValue == true then
-                    for i,v in game.Players.LocalPlayer.PlayerGui.TemporaryUI:GetChildren() do
-                        if v.Name == "1x1x1x1Popup" then
-                            v.Position = UDim2.new(0.5,0,0.5,0)
-                            --[[mousemoveabs(-1000, -1000)
-                            mousemoveabs(350, 170)
-                            mouse1click()
-                            task.wait(0.01)--]]
+            task.spawn(function()
+                while task.wait() do
+                    if CurrentValue == true then
+                        for i,v in game.Players.LocalPlayer.PlayerGui.TemporaryUI:GetChildren() do
+                            if v.Name == "1x1x1x1Popup" then
+                                v.Position = UDim2.new(0.5,0,0.5,0)
+                                --[[mousemoveabs(-1000, -1000)
+                                mousemoveabs(350, 170)
+                                mouse1click()
+                                task.wait(0.01)--]]
+                            end
                         end
-                    end 
+                    else
+                        return 
+                    end
                 end
-            end
-        end)
+            end)
 
         end,
      })
@@ -227,22 +231,23 @@ elseif game.GameId == 6331902150 then
         Flag = "Toggle2", -- A flag is the identifier for the configuration file, make sure every element has a different flag if you're using configuration saving to ensure no overlaps
         Callback = function(Value)
             CurrentValue = Value
-        task.spawn(function()
-            while task.wait() do
-                if CurrentValue == true then
-                    if workspace.Players.Killers:FindFirstChildOfClass("Model") then
-                        local light = Instance.new("Highlight", workspace.Players.Killers:FindFirstChildOfClass("Model"))
-                        light.Name = "Kek"
-                        light.FillTransparency = 0.3
-                        light.OutlineColor = Color3.fromRGB(193,90,99)
-                    end
-                else
-                    if workspace.Players.Killers:FindFirstChildOfClass("Model") and workspace.Players.Killers:FindFirstChildOfClass("Model"):FindFirstChild("Kek") then
-                        workspace.Players.Killers:FindFirstChildOfClass("Model"):FindFirstChild("Kek"):Destroy()
+            task.spawn(function()
+                while task.wait() do
+                    if CurrentValue == true then
+                        if workspace.Players.Killers:FindFirstChildOfClass("Model") then
+                            local light = Instance.new("Highlight", workspace.Players.Killers:FindFirstChildOfClass("Model"))
+                            light.Name = "Kek"
+                            light.FillTransparency = 0.3
+                            light.OutlineColor = Color3.fromRGB(193,90,99)
+                        end
+                    else
+                        if workspace.Players.Killers:FindFirstChildOfClass("Model") and workspace.Players.Killers:FindFirstChildOfClass("Model"):FindFirstChild("Kek") then
+                            workspace.Players.Killers:FindFirstChildOfClass("Model"):FindFirstChild("Kek"):Destroy()
+                            return
+                        end
                     end
                 end
-            end
-        end)
+            end)
         end,
      })
 
