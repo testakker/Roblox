@@ -110,6 +110,7 @@ local Window = Rayfield:CreateWindow({
     end,
  })
 elseif game.GameId == 6331902150 then
+    getgenv().EnabledModifier = false
 
 
     local ItemsTab = Window:CreateTab("Items", 8915667153) -- Title, Image
@@ -374,13 +375,13 @@ elseif game.GameId == 6331902150 then
         Callback = function(Value)
             CurrentValue = Value
             local success, err = pcall(function()
-                local energy = game: GetService("Players").LocalPlayer.Character.Energy
+                local energy = game:GetService("Players").LocalPlayer.Character:WaitForChild("Energy")
                 local energyhook
                 energyhook= hookmetamethod(game, "__index", function(self, v)
                 if (self == energy and v =="Value") or (self==energy and v=="MaxValue") then
-                return math.huge
+                    return math.huge
                 end
-                return energyhook(self, v)
+                    return energyhook(self, v)
                 end)
             end)
             if not success then
@@ -396,6 +397,8 @@ elseif game.GameId == 6331902150 then
 
 
  elseif game.GameId == 7436755782 then
+    getgenv().Collect = false
+    getgenv().EnabledModifier = false
     local ItemsTab = Window:CreateTab("Plants", 10970238067) -- Title, Image
     local MiscTab = Window:CreateTab("Misc", 12120687742) -- Title, Image
     local Toggle = ItemsTab:CreateToggle({
