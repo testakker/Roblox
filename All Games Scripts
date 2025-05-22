@@ -281,7 +281,6 @@ elseif game.GameId == 6331902150 then
     local Toggle = PlayerTab:CreateToggle({
         Name = "removing stun and buffind speed for some characters",
         CurrentValue = false,
-        getgenv().EnabledModifier = CurrentValue,
         Flag = "Toggle1", -- A flag is the identifier for the configuration file, make sure every element has a different flag if you're using configuration saving to ensure no overlaps
         Callback = function(Value)
             CurrentValue = Value
@@ -300,10 +299,10 @@ elseif game.GameId == 6331902150 then
             end)
             if not success then
                 Rayfield:Notify({
-                Title = "Error",
-                Content = "Your executor is low level",
-                Duration = 3,
-                Image = 6726315940,
+                    Title = "Error",
+                    Content = "Your executor is low level",
+                    Duration = 3,
+                    Image = 6726315940,
                 })
             end
         end,
@@ -386,10 +385,10 @@ elseif game.GameId == 6331902150 then
             end)
             if not success then
                 Rayfield:Notify({
-                Title = "Error",
-                Content = "Your executor is low level",
-                Duration = 3,
-                Image = 6726315940,
+                    Title = "Error",
+                    Content = "Your executor is low level",
+                    Duration = 3,
+                    Image = 6726315940,
                 })
             end
         end,
