@@ -318,10 +318,10 @@ elseif game.GameId == 6331902150 then
                         end 
                     end
                 end)
-            elseif game.Players.LocalPlayer.Character.Parent == workspace.Players.Killers and _EnabledModifier == true then
+            elseif game.Players.LocalPlayer.Character.Parent == workspace.Players.Killers and getgenv().EnabledModifier == true then
                 workspace.Players.Killers:FindFirstChildOfClass("Model").SpeedMultipliers.ChildAdded:Connect(function(child)
                     if namesToModify[child.Name] then
-                        while child and task.wait() and _EnabledModifier == true do 
+                        while child and task.wait() and getgenv().EnabledModifier == true do 
                             child.Value = Multipliers[child.Name]
                         end
                     end
@@ -366,6 +366,35 @@ elseif game.GameId == 6331902150 then
             game:GetService("Players").LocalPlayer.Character:SetAttribute("DashLength", Value)
         end,
     })
+
+        local Toggle = PlayerTab:CreateToggle({
+        Name = "..inf energy btw you cant disable this after enabling :D",
+        CurrentValue = false,
+        Flag = "Toggle2", -- A flag is the identifier for the configuration file, make sure every element has a different flag if you're using configuration saving to ensure no overlaps
+        Callback = function(Value)
+            CurrentValue = Value
+            local success, err = pcall(function()
+                local energy = game: GetService("Players").LocalPlayer.Character.Energy
+                local energyhook
+                energyhook= hookmetamethod(game, "__index", function(self, v)
+                if (self == energy and v =="Value") or (self==energy and v=="MaxValue") then
+                return math.huge
+                end
+                return energyhook(self, v)
+                end)
+            end)
+            if not success then
+                Rayfield:Notify({
+                Title = "Error",
+                Content = "Your executor is low level",
+                Duration = 3,
+                Image = 6726315940,
+                })
+            end
+        end,
+    })
+
+
  elseif game.GameId == 7436755782 then
     local ItemsTab = Window:CreateTab("Plants", 10970238067) -- Title, Image
     local MiscTab = Window:CreateTab("Misc", 12120687742) -- Title, Image
