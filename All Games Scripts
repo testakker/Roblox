@@ -372,55 +372,36 @@ elseif game.GameId == 6331902150 then
         end,
     })
 
-        
-
-
- elseif game.GameId == 7436755782 then
-    getgenv().Collect = false
-    getgenv().EnabledModifier = false
-    local ItemsTab = Window:CreateTab("Plants", 10970238067) -- Title, Image
-    local MiscTab = Window:CreateTab("Misc", 12120687742) -- Title, Image
-    local Toggle = ItemsTab:CreateToggle({
-        Name = "Collect all plants",
+        local Toggle = PlayerTab:CreateToggle({
+        Name = "..inf energy btw you cant disable this after enabling :D",
         CurrentValue = false,
-        getgenv().Collect = CurrentValue,
-        Flag = "Toggle1", -- A flag is the identifier for the configuration file, make sure every element has a different flag if you're using configuration saving to ensure no overlaps
+        Flag = "Toggle2", -- A flag is the identifier for the configuration file, make sure every element has a different flag if you're using configuration saving to ensure no overlaps
         Callback = function(Value)
             CurrentValue = Value
-            getgenv().Collect = CurrentValue
-            if getgenv().Collect then
-                local plot = nil
-                for i,v in workspace.Farm:GetDescendants() do
-                    if v:FindFirstChild("Owner") then
-                        if v.Owner.Value == game:GetService("Players").LocalPlayer.Name then
-                            plot = v.Parent
-                        end
-                    end
+            local success, err = pcall(function()
+                local energy = game:GetService("Players").LocalPlayer.Character:WaitForChild("Energy")
+                local energyhook
+                energyhook= hookmetamethod(game, "__index", function(self, v)
+                if (self == energy and v =="Value") or (self==energy and v=="MaxValue") then
+                    return math.huge
                 end
-
-                while task.wait(.1) and getgenv().Collect == true do
-                    for i,v in plot.Plants_Physical:GetDescendants() do
-                        if v:FindFirstChildOfClass("ProximityPrompt") and getgenv().Collect == true then
-                            v:FindFirstChildOfClass("ProximityPrompt").RequiresLineOfSight = false
-                            v:FindFirstChildOfClass("ProximityPrompt").MaxActivationDistance = 9e9
-                            v:FindFirstChildOfClass("ProximityPrompt"):InputHoldBegin()
-                        end
-                    end
-                end
+                    return energyhook(self, v)
+                end)
+            end)
+            if not success then
+                Rayfield:Notify({
+                    Title = "Error",
+                    Content = "Your executor is low level",
+                    Duration = 3,
+                    Image = 6726315940,
+                })
             end
         end,
     })
 
-    local Toggle = MiscTab:CreateToggle({
-        Name = "Auto Sell when inventory is full",
-        CurrentValue = false,
-        getgenv().EnabledModifier = CurrentValue,
-        Flag = "Toggle1", -- A flag is the identifier for the configuration file, make sure every element has a different flag if you're using configuration saving to ensure no overlaps
-        Callback = function(Value)
-            CurrentValue = Value
-            getgenv().EnabledModifier = CurrentValue
-        end,
-    })
+
+ elseif game.GameId == 7436755782 then
+    
  else
     local SpeedSlider = PlayerTab:CreateSlider({
     Name = "Walk Speed",
