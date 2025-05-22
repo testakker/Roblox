@@ -280,35 +280,52 @@ elseif game.GameId == 6331902150 then
     local Toggle = PlayerTab:CreateToggle({
         Name = "removing stun and buffind speed for some characters",
         CurrentValue = false,
+        getgenv().EnabledModifier = CurrentValue,
         Flag = "Toggle1", -- A flag is the identifier for the configuration file, make sure every element has a different flag if you're using configuration saving to ensure no overlaps
         Callback = function(Value)
             CurrentValue = Value
-            _EnabledModifier = CurrentValue
+            getgenv().EnabledModifier = CurrentValue
         end,
     })
-    local connection
-    local connection2
+
+        local Toggle = PlayerTab:CreateToggle({
+        Name = "..inf stamina.",
+        CurrentValue = false,
+        Flag = "Toggle2", -- A flag is the identifier for the configuration file, make sure every element has a different flag if you're using configuration saving to ensure no overlaps
+        Callback = function(Value)
+            CurrentValue = Value
+            local success, err = pcall(function()
+                require(game:GetService("ReplicatedStorage").Systems.Character.Game.Sprintng).StaminaLossDisabled = CurrentValue
+            end)
+            if not success then
+                Rayfield:Notify({
+                Title = "Error",
+                Content = "Your executor is low level",
+                Duration = 3,
+                Image = 6726315940,
+                })
+            end
+        end,
+    })
+
      task.spawn(function()
         while task.wait(.01) do
-            if game.Players.LocalPlayer.Character.Parent == workspace.Players.Survivors and _EnabledModifier == true then
-    connection = workspace.Players.Survivors:FindFirstChildOfClass("Model").SpeedMultipliers.ChildAdded:Connect(function(child)
+            if game.Players.LocalPlayer.Character.Parent == workspace.Players.Survivors and getgenv().EnabledModifier == true then
+                workspace.Players.Survivors:FindFirstChildOfClass("Model").SpeedMultipliers.ChildAdded:Connect(function(child)
                     if names2[child.Name] then
-                        while child and task.wait() do
+                        while child and task.wait() and getgenv().EnabledModifier == true do
                             child.Value = Multipliers[child.Name]
                         end 
                     end
                 end)
             elseif game.Players.LocalPlayer.Character.Parent == workspace.Players.Killers and _EnabledModifier == true then
-    connection2 = workspace.Players.Killers:FindFirstChildOfClass("Model").SpeedMultipliers.ChildAdded:Connect(function(child)
+                workspace.Players.Killers:FindFirstChildOfClass("Model").SpeedMultipliers.ChildAdded:Connect(function(child)
                     if namesToModify[child.Name] then
-                        while child and task.wait() do 
+                        while child and task.wait() and _EnabledModifier == true do 
                             child.Value = Multipliers[child.Name]
                         end
                     end
                 end)
-            elseif _EnabledModifier == false then
-                if connection then connection:Disconnect() end
-                if connection2 then connection2:Disconnect() end
             end
         end
     end)
@@ -325,18 +342,84 @@ elseif game.GameId == 6331902150 then
             game:GetService("Players").LocalPlayer.Character.Humanoid.WalkSpeed = Value
         end,
     })--]]
+ elseif game.GameId == 994732206 then 
+       --[[ local SpeedSlider = PlayerTab:CreateSlider({
+        Name = "Walk Speed",
+        Range = {1, 1000},
+        Increment = 1,
+        Suffix = "Speed",
+        CurrentValue = game:GetService("Players").LocalPlayer.Character.Humanoid.WalkSpeed,
+        Flag = "Slider3", -- A flag is the identifier for the configuration file, make sure every element has a different flag if you're using configuration saving to ensure no overlaps
+        Callback = function(Value)
+            game:GetService("Players").LocalPlayer.Character.Humanoid.WalkSpeed = Value
+        end,
+        })--]]
+    --game:GetService("Players").LocalPlayer.Character
+        local Dash = PlayerTab:CreateSlider({
+        Name = "Dash Length",
+        Range = {1, 2000},
+        Increment = 1,
+        Suffix = "Length",
+        CurrentValue = 1,
+        Flag = "Slider4", -- A flag is the identifier for the configuration file, make sure every element has a different flag if you're using configuration saving to ensure no overlaps
+        Callback = function(Value)
+            game:GetService("Players").LocalPlayer.Character:SetAttribute("DashLength", Value)
+        end,
+    })
+ elseif game.GameId == 7436755782 then
+    local ItemsTab = Window:CreateTab("Plants", 10970238067) -- Title, Image
+    local MiscTab = Window:CreateTab("Misc", 12120687742) -- Title, Image
+    local Toggle = ItemsTab:CreateToggle({
+        Name = "Collect all plants",
+        CurrentValue = false,
+        getgenv().Collect = CurrentValue,
+        Flag = "Toggle1", -- A flag is the identifier for the configuration file, make sure every element has a different flag if you're using configuration saving to ensure no overlaps
+        Callback = function(Value)
+            CurrentValue = Value
+            getgenv().Collect = CurrentValue
+            if getgenv().Collect then
+                local plot = nil
+                for i,v in workspace.Farm:GetDescendants() do
+                    if v:FindFirstChild("Owner") then
+                        if v.Owner.Value == game:GetService("Players").LocalPlayer.Name then
+                            plot = v.Parent
+                        end
+                    end
+                end
 
+                while task.wait(.1) and getgenv().Collect == true do
+                    for i,v in plot.Plants_Physical:GetDescendants() do
+                        if v:FindFirstChildOfClass("ProximityPrompt") and getgenv().Collect == true then
+                            v:FindFirstChildOfClass("ProximityPrompt").RequiresLineOfSight = false
+                            v:FindFirstChildOfClass("ProximityPrompt").MaxActivationDistance = 9e9
+                            v:FindFirstChildOfClass("ProximityPrompt"):InputHoldBegin()
+                        end
+                    end
+                end
+            end
+        end,
+    })
+
+    local Toggle = MiscTab:CreateToggle({
+        Name = "Auto Sell when inventory is full",
+        CurrentValue = false,
+        getgenv().EnabledModifier = CurrentValue,
+        Flag = "Toggle1", -- A flag is the identifier for the configuration file, make sure every element has a different flag if you're using configuration saving to ensure no overlaps
+        Callback = function(Value)
+            CurrentValue = Value
+            getgenv().EnabledModifier = CurrentValue
+        end,
+    })
  else
     local SpeedSlider = PlayerTab:CreateSlider({
     Name = "Walk Speed",
     Range = {1, 100},
     Increment = 1,
     Suffix = "Speed",
-    CurrentValue = 1,
+    CurrentValue = game:GetService("Players").LocalPlayer.Character.Humanoid.WalkSpeed,
     Flag = "Slider3", -- A flag is the identifier for the configuration file, make sure every element has a different flag if you're using configuration saving to ensure no overlaps
     Callback = function(Value)
         game:GetService("Players").LocalPlayer.Character.Humanoid.WalkSpeed = Value
     end,
  })
- SpeedSlider:Set(game:GetService("Players").LocalPlayer.Character.Humanoid.WalkSpeed)
  end
