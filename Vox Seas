@@ -1,5 +1,6 @@
 local character = game:GetService("Players").LocalPlayer.Character or game:GetService("Players").LocalPlayer.CharacterAdded:Wait()
 local hrp = character.HumanoidRootPart
+local localPlr = game:GetService("Players").LocalPlayer
 local tween_Service = game:GetService("TweenService")
 local tweenInfo = TweenInfo.new(2, Enum.EasingStyle.Linear)
 local Rayfield = loadstring(game:HttpGet('https://raw.githubusercontent.com/testakker/Roblox/refs/heads/main/Rayfield'))()
@@ -81,6 +82,10 @@ local Bandints_Toggle = Farm_Tab:CreateToggle({
                     local mob_Root = mob.HumanoidRootPart
                     local tween = tween_Service:Create(hrp, tweenInfo, {CFrame = mob_Root.CFrame * CFrame.new(0,-5, 0)})
                     tween:Play()
+                    tween.Completed:Wait()
+                    if localPlr.Backpack:FindFirstChild("Combat") then
+                        character.Humanoid:EquipTool(localPlr.Backpack:FindFirstChild("Combat"))
+                    end
                     local args = {
                         "DealDamage",
                         {
