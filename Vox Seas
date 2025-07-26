@@ -77,7 +77,6 @@ local Bandints_Toggle = Farm_Tab:CreateToggle({
         Bandit = Value
         while CurrentValue == true and task.wait() do
             for _, mob in Mob_Folder["Foosha Village"]:GetChildren() do
-                print(mob.Name)
                 while mob and mob:IsA("Model") and mob.Humanoid.Health > 0 and CurrentValue == true and task.wait(1) do
                     local mob_Root = mob.HumanoidRootPart
                     local tween = tween_Service:Create(hrp, tweenInfo, {CFrame = mob_Root.CFrame * CFrame.new(0,-5, 0)})
