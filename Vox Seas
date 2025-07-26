@@ -1,7 +1,7 @@
 local character = game:GetService("Players").LocalPlayer.Character or game:GetService("Players").LocalPlayer.CharacterAdded:Wait()
 local hrp = character.HumanoidRootPart
-local t = game:GetChildren("TweenService")
-local tweenInfo = TweenInfo.new(5, Enum.EasingStyle.Linear)
+local tween_Service = game:GetChildren("TweenService")
+local tweenInfo = TweenInfo.new(10, Enum.EasingStyle.Linear)
 local Rayfield = loadstring(game:HttpGet('https://raw.githubusercontent.com/testakker/Roblox/refs/heads/main/Rayfield'))()
 local Window = Rayfield:CreateWindow({
     Name = "testakker scripts",
@@ -80,7 +80,9 @@ local Bandints_Toggle = Farm_Tab:CreateToggle({
                 print(mob.Name)
                 while mob and mob:IsA("Model") and mob.Humanoid.Health > 0 and CurrentValue == true and task.wait(1) do
                     local mob_Root = mob.HumanoidRootPart
-                    t:Create(hrp, tweenInfo, {CFrame = mob_Root.CFrame * CFrame.new(0,-5, 0)}):Play()
+                    local tween = tween_Service:Create(hrp, tweenInfo, {CFrame = mob_Root.CFrame * CFrame.new(0,-5, 0)})
+                    tween:Play()
+                    tween.Completed:Wait()
                     local args = {
                         "DealDamage",
                         {
