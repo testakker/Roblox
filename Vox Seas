@@ -1,4 +1,5 @@
 local character = game:GetService("Players").LocalPlayer.Character or game:GetService("Players").LocalPlayer.CharacterAdded:Wait()
+local hrp = character.HumanoidRootPart
 local Rayfield = loadstring(game:HttpGet('https://raw.githubusercontent.com/testakker/Roblox/refs/heads/main/Rayfield'))()
 local Window = Rayfield:CreateWindow({
     Name = "testakker scripts",
@@ -62,4 +63,35 @@ if game:GetService("Players").LocalPlayer.Character then
     JumpHeightSlider:Set(game:GetService("Players").LocalPlayer.Character.Humanoid.JumpHeight)
 end
 
+local Mob_Folder = game:GetService("Workspace").Playability.Enemys
+local Bandit = false
 local Farm_Tab = Window:CreateTab("Farm", 6975704454) -- Title, Image
+local Bandints_Toggle = Farm_Tab:CreateToggle({
+    Name = "Farm bandits(lvl 1-25)",
+    CurrentValue = false,
+    Flag = "bandits", -- A flag is the identifier for the configuration file, make sure every element has a different flag if you're using configuration saving to ensure no overlaps
+    Callback = function(Value)
+        CurrentValue = Value
+        Bandit = Value
+        while CurrentValue == true and task.wait() do
+            for _, mob in Mob_Folder["Foosha Village"]:GetChildren() do
+                while mob and mob:IsA("Model") and mob.Humanoid.Health > 0 do
+                    local mob_Root = mob.HumanoidRootPart
+                    hrp.CFrame = mob_Root.CFrame * CFrame.new(0,-5, 0)
+                    local args = {
+                        "DealDamage",
+                        {
+                            CallTime = 1753525329.5177016,
+                            Results = {
+                                workspace:WaitForChild("Playability"):WaitForChild("Enemys"):WaitForChild("Foosha Village"):WaitForChild(mob)
+                            },
+                            Combo = 4,
+                            DelayTime = 0
+                        }
+                    }
+                    game:GetService("ReplicatedStorage"):WaitForChild("BetweenSides"):WaitForChild("Remotes"):WaitForChild("Events"):WaitForChild("CombatEvent"):FireServer(unpack(args))
+                end
+            end
+        end
+    end,
+})
