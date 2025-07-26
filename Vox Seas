@@ -87,7 +87,7 @@ local Bandints_Toggle = Farm_Tab:CreateToggle({
                                 workspace:WaitForChild("Playability"):WaitForChild("Enemys"):WaitForChild("Foosha Village")[mob.Name]
                             },
                             Combo = 2,
-                            DelayTime = 0
+                            DelayTime = 0.1
                         }
                     }
                     game:GetService("ReplicatedStorage"):WaitForChild("BetweenSides"):WaitForChild("Remotes"):WaitForChild("Events"):WaitForChild("CombatEvent"):FireServer(unpack(args))
