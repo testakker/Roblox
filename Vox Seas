@@ -83,7 +83,7 @@ local Bandints_Toggle = Farm_Tab:CreateToggle({
                         {
                             CallTime = 1753525329.5177016,
                             Results = {
-                                workspace:WaitForChild("Playability"):WaitForChild("Enemys"):WaitForChild("Foosha Village"):WaitForChild(mob)
+                                workspace:WaitForChild("Playability"):WaitForChild("Enemys"):WaitForChild("Foosha Village"):WaitForChild(mob.Name)
                             },
                             Combo = 4,
                             DelayTime = 0
