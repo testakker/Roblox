@@ -75,6 +75,7 @@ local Bandints_Toggle = Farm_Tab:CreateToggle({
         Bandit = Value
         while CurrentValue == true and task.wait() do
             for _, mob in Mob_Folder["Foosha Village"]:GetChildren() do
+                print(mob.Name)
                 while mob and mob:IsA("Model") and mob.Humanoid.Health > 0 do
                     local mob_Root = mob.HumanoidRootPart
                     hrp.CFrame = mob_Root.CFrame * CFrame.new(0,-5, 0)
@@ -83,7 +84,7 @@ local Bandints_Toggle = Farm_Tab:CreateToggle({
                         {
                             CallTime = 1753525329.5177016,
                             Results = {
-                                workspace:WaitForChild("Playability"):WaitForChild("Enemys"):WaitForChild("Foosha Village"):WaitForChild(tostring(mob.Name))
+                                workspace:WaitForChild("Playability"):WaitForChild("Enemys"):WaitForChild("Foosha Village")[mob.Name]
                             },
                             Combo = 4,
                             DelayTime = 0
