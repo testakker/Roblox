@@ -76,13 +76,17 @@ local Bandints_Toggle = Farm_Tab:CreateToggle({
     Callback = function(Value)
         CurrentValue = Value
         Bandit = Value
+        if not CurrentValue then hrp.Anchored = false end
         while CurrentValue == true and task.wait() do
+            hrp.Anchored = true
             for _, mob in Mob_Folder["Foosha Village"]:GetChildren() do
                 while mob and mob:IsA("Model") and mob.Humanoid.Health > 0 and CurrentValue == true and task.wait(1) do
                     local mob_Root = mob.HumanoidRootPart
-                    local tween = tween_Service:Create(hrp, tweenInfo, {CFrame = mob_Root.CFrame * CFrame.new(0,-5, 0)})
-                    tween:Play()
-                    tween.Completed:Wait()
+                    if hrp.CFrame ~= mob_Root.CFrame * CFrame.new(0,-5, 0) then
+                        local tween = tween_Service:Create(hrp, tweenInfo, {CFrame = mob_Root.CFrame * CFrame.new(0,-5, 0)})
+                        tween:Play()
+                        tween.Completed:Wait()
+                    end
                     if localPlr.Backpack:FindFirstChild("Combat") then
                         character.Humanoid:EquipTool(localPlr.Backpack:FindFirstChild("Combat"))
                     end
