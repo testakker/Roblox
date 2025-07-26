@@ -1,6 +1,6 @@
 local character = game:GetService("Players").LocalPlayer.Character or game:GetService("Players").LocalPlayer.CharacterAdded:Wait()
 local hrp = character.HumanoidRootPart
-local tween_Service = game:GetChildren("TweenService")
+local tween_Service = game:GetService("TweenService")
 local tweenInfo = TweenInfo.new(10, Enum.EasingStyle.Linear)
 local Rayfield = loadstring(game:HttpGet('https://raw.githubusercontent.com/testakker/Roblox/refs/heads/main/Rayfield'))()
 local Window = Rayfield:CreateWindow({
