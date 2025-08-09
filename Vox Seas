@@ -87,6 +87,9 @@ local Bandints_Toggle = Farm_Tab:CreateToggle({
                         local tween = tween_Service:Create(hrp, tweenInfo, {CFrame = mob_Root.CFrame * CFrame.new(0,-6, 0)})
                         tween:Play()
                         tween.Completed:Wait()
+                        tween = tween_Service:Create(hrp, tweenInfo, {CFrame = mob_Root.CFrame * CFrame.new(0,-6, 0)})
+                        tween:Play()
+                        tween.Completed:Wait()
                     end
                     if localPlr.Backpack:FindFirstChild("Combat") then
                         character.Humanoid:EquipTool(localPlr.Backpack:FindFirstChild("Combat"))
