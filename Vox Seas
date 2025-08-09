@@ -2,7 +2,7 @@ local character = game:GetService("Players").LocalPlayer.Character or game:GetSe
 local hrp = character.HumanoidRootPart
 local localPlr = game:GetService("Players").LocalPlayer
 local tween_Service = game:GetService("TweenService")
-local tweenInfo = TweenInfo.new(1.5, Enum.EasingStyle.Linear)
+local tweenInfo = TweenInfo.new(1.25, Enum.EasingStyle.Linear)
 local Rayfield = loadstring(game:HttpGet('https://raw.githubusercontent.com/testakker/Roblox/refs/heads/main/Rayfield'))()
 local Window = Rayfield:CreateWindow({
     Name = "testakker scripts",
@@ -92,7 +92,7 @@ local Bandints_Toggle = Farm_Tab:CreateToggle({
                         tween:Play()
                         tween.Completed:Wait()
                         ]]
-                        print("1.5 seconds")
+                        print("1.25 seconds")
                     end
                     if localPlr.Backpack:FindFirstChild("Combat") then
                         character.Humanoid:EquipTool(localPlr.Backpack:FindFirstChild("Combat"))
@@ -106,7 +106,7 @@ local Bandints_Toggle = Farm_Tab:CreateToggle({
                                 workspace:WaitForChild("Playability"):WaitForChild("Enemys"):WaitForChild("Foosha Village")[mob.Name]
                             },
                             Combo = 2,
-                            DelayTime = 0.01
+                            DelayTime = 0.2
                         }
                     }
                     game:GetService("ReplicatedStorage"):WaitForChild("BetweenSides"):WaitForChild("Remotes"):WaitForChild("Events"):WaitForChild("CombatEvent"):FireServer(unpack(args))
