@@ -102,6 +102,7 @@ local Bandints_Toggle = Farm_Tab:CreateToggle({
                             DelayTime = 0.1
                         }
                     }
+                    print(mob.Name)
                     game:GetService("ReplicatedStorage"):WaitForChild("BetweenSides"):WaitForChild("Remotes"):WaitForChild("Events"):WaitForChild("CombatEvent"):FireServer(unpack(args))
                 end
             end
