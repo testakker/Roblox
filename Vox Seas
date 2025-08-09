@@ -2,7 +2,7 @@ local character = game:GetService("Players").LocalPlayer.Character or game:GetSe
 local hrp = character.HumanoidRootPart
 local localPlr = game:GetService("Players").LocalPlayer
 local tween_Service = game:GetService("TweenService")
-local tweenInfo = TweenInfo.new(1, Enum.EasingStyle.Linear)
+local tweenInfo = TweenInfo.new(4, Enum.EasingStyle.Linear)
 local Rayfield = loadstring(game:HttpGet('https://raw.githubusercontent.com/testakker/Roblox/refs/heads/main/Rayfield'))()
 local Window = Rayfield:CreateWindow({
     Name = "testakker scripts",
@@ -85,7 +85,7 @@ local Bandints_Toggle = Farm_Tab:CreateToggle({
                     local mob_Root = mob.HumanoidRootPart
                     local calculate = mob_Root.CFrame * CFrame.new(0, -7, 0)
                     --if (character.HumanoidRootPart.Position - calculate.Position).Magnitude > 0.01 then
-                        local tween = tween_Service:Create(hrp, tweenInfo, {CFrame = mob_Root.CFrame * CFrame.new(0, 0, 4)})
+                        local tween = tween_Service:Create(hrp, tweenInfo, {CFrame = CFrame.new(mob_Root.Position + Vector3.new(0, 0, 4))})
                         tween:Play()
                     --[[    tween.Completed:Wait()
                         print("0.3 seconds, V2")
