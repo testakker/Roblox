@@ -83,11 +83,11 @@ local Bandints_Toggle = Farm_Tab:CreateToggle({
                 while mob and mob:IsA("Model") and mob.Humanoid.Health > 0 and CurrentValue == true and task.wait() do
                     hrp.Anchored = true
                     local mob_Root = mob.HumanoidRootPart
-                    if hrp.CFrame ~= mob_Root.CFrame * CFrame.new(0,-6, 0) then
-                        local tween = tween_Service:Create(hrp, tweenInfo, {CFrame = mob_Root.CFrame * CFrame.new(0,-6, 0)})
+                    if character.HumanoidRootPart.CFrame ~= mob_Root.CFrame * CFrame.new(0,-7, 0) then
+                        local tween = tween_Service:Create(hrp, tweenInfo, {CFrame = mob_Root.CFrame * CFrame.new(0,-7, 0)})
                         tween:Play()
                         tween.Completed:Wait()
-                        tween = tween_Service:Create(hrp, tweenInfo, {CFrame = mob_Root.CFrame * CFrame.new(0,-6, 0)})
+                        tween = tween_Service:Create(hrp, tweenInfo, {CFrame = mob_Root.CFrame * CFrame.new(0,-7, 0)})
                         tween:Play()
                         tween.Completed:Wait()
                     end
@@ -103,7 +103,7 @@ local Bandints_Toggle = Farm_Tab:CreateToggle({
                                 workspace:WaitForChild("Playability"):WaitForChild("Enemys"):WaitForChild("Foosha Village")[mob.Name]
                             },
                             Combo = 2,
-                            DelayTime = 0.2
+                            DelayTime = 0.01
                         }
                     }
                     game:GetService("ReplicatedStorage"):WaitForChild("BetweenSides"):WaitForChild("Remotes"):WaitForChild("Events"):WaitForChild("CombatEvent"):FireServer(unpack(args))
