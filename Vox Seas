@@ -107,7 +107,6 @@ local Bandints_Toggle = Farm_Tab:CreateToggle({
                     }
                     game:GetService("ReplicatedStorage"):WaitForChild("BetweenSides"):WaitForChild("Remotes"):WaitForChild("Events"):WaitForChild("CombatEvent"):FireServer(unpack(args))
                 end
-                hrp.Anchored = false
             end
         end
     end,
