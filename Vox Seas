@@ -86,12 +86,7 @@ local Bandints_Toggle = Farm_Tab:CreateToggle({
                     if character.HumanoidRootPart.CFrame ~= mob_Root.CFrame * CFrame.new(0,-7, 0) then
                         local tween = tween_Service:Create(hrp, tweenInfo, {CFrame = mob_Root.CFrame * CFrame.new(0,-7, 0)})
                         tween:Play()
-                        tween.Completed:Wait()
-                        --[[
-                        tween = tween_Service:Create(hrp, tweenInfo, {CFrame = mob_Root.CFrame * CFrame.new(0,-7, 0)})
-                        tween:Play()
-                        tween.Completed:Wait()
-                        ]]
+                        --tween.Completed:Wait()
                         print("1 seconds")
                     end
                     if localPlr.Backpack:FindFirstChild("Combat") then
