@@ -80,7 +80,7 @@ local Bandints_Toggle = Farm_Tab:CreateToggle({
         while CurrentValue == true and task.wait() do
             hrp.Anchored = true
             for _, mob in Mob_Folder["Foosha Village"]:GetChildren() do
-                while mob and mob:IsA("Model") and mob.Humanoid.Health > 0 and CurrentValue == true and task.wait() do
+                while mob and mob:IsA("Model") and mob.Humanoid.Health > 0 and CurrentValue == true and mob.Parent == workspace:WaitForChild("Playability"):WaitForChild("Enemys"):WaitForChild("Foosha Village") and task.wait() do
                     hrp.Anchored = true
                     local mob_Root = mob.HumanoidRootPart
                     if character.HumanoidRootPart.CFrame ~= mob_Root.CFrame * CFrame.new(0,-7, 0) then
