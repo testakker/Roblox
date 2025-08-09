@@ -84,7 +84,7 @@ local Bandints_Toggle = Farm_Tab:CreateToggle({
                     hrp.Anchored = true
                     local mob_Root = mob.HumanoidRootPart
                     if hrp.CFrame ~= mob_Root.CFrame * CFrame.new(0,-7, 0) then
-                        local tween = tween_Service:Create(hrp, tweenInfo, {CFrame = mob_Root.CFrame * CFrame.new(0,-7, 0)})
+                        local tween = tween_Service:Create(hrp, tweenInfo, {CFrame = mob_Root.CFrame * CFrame.new(0,-6, 0)})
                         tween:Play()
                         tween.Completed:Wait()
                     end
@@ -102,7 +102,7 @@ local Bandints_Toggle = Farm_Tab:CreateToggle({
                             DelayTime = 0.1
                         }
                     }
-                    print(mob.Name)
+                    if not workspace:WaitForChild("Playability"):WaitForChild("Enemys"):WaitForChild("Foosha Village")[mob.Name] or workspace:WaitForChild("Playability"):WaitForChild("Enemys"):WaitForChild("Foosha Village")[mob.Name].Humanoid.Health <= 0 then break end
                     game:GetService("ReplicatedStorage"):WaitForChild("BetweenSides"):WaitForChild("Remotes"):WaitForChild("Events"):WaitForChild("CombatEvent"):FireServer(unpack(args))
                 end
             end
