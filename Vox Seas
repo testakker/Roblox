@@ -83,11 +83,11 @@ local Bandints_Toggle = Farm_Tab:CreateToggle({
                 while mob and mob:IsA("Model") and mob.Humanoid.Health > 0 and CurrentValue == true and mob.Parent == workspace:WaitForChild("Playability"):WaitForChild("Enemys"):WaitForChild("Foosha Village") and task.wait() do
                     hrp.Anchored = true
                     local mob_Root = mob.HumanoidRootPart
-                    if character.HumanoidRootPart.CFrame ~= mob_Root.CFrame * CFrame.new(0,-7, 0) then
-                        local tween = tween_Service:Create(hrp, tweenInfo, {CFrame = mob_Root.CFrame * CFrame.new(0,-7, 0)})
+                    if character.HumanoidRootPart.CFrame ~= mob_Root.CFrame * CFrame.new(0,-3, 0) then
+                        local tween = tween_Service:Create(hrp, tweenInfo, {CFrame = mob_Root.CFrame * CFrame.new(0,-3, 0)})
                         tween:Play()
                         --tween.Completed:Wait()
-                        print("1 seconds")
+                        print("1 seconds, V1")
                     end
                     if localPlr.Backpack:FindFirstChild("Combat") then
                         character.Humanoid:EquipTool(localPlr.Backpack:FindFirstChild("Combat"))
