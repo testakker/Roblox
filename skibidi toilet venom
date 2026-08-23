@@ -57,7 +57,9 @@ coro = task.spawn(function()
             plr.Character:WaitForChild("Handheld Laser Cannon"):WaitForChild("RemoteFunction"):InvokeServer(unpack(args))
             started = true
         end
-        plr.Character:WaitForChild("Handheld Laser Cannon"):WaitForChild("RemoteEvent3"):FireServer(unpack(args))
+        for i=100,0,-1 do
+            plr.Character:WaitForChild("Handheld Laser Cannon"):WaitForChild("RemoteEvent3"):FireServer(unpack(args))
+        end
     end
 end)
 
@@ -92,7 +94,9 @@ game:GetService("UserInputService").InputBegan:Connect(function(input, p)
                         plr.Character:WaitForChild("Handheld Laser Cannon"):WaitForChild("RemoteFunction"):InvokeServer(unpack(args))
                         started = true
                     end
-                    plr.Character:WaitForChild("Handheld Laser Cannon"):WaitForChild("RemoteEvent3"):FireServer(unpack(args))
+                    for i=100,0,-1 do
+                        plr.Character:WaitForChild("Handheld Laser Cannon"):WaitForChild("RemoteEvent3"):FireServer(unpack(args))
+                    end
                 end
             end)
 
