@@ -1,0 +1,102 @@
+local plrsS = game:GetService("Players")
+local plr = plrsS.LocalPlayer
+
+local plrCharacter = nil
+
+local started = false
+
+local function FindNearestPlayer()
+    local nearest
+    local distance = math.huge
+
+    local rayparams = RaycastParams.new()
+    rayparams.FilterDescendantsInstances = {plr.Character}
+    rayparams.FilterType = Enum.RaycastFilterType.Exclude
+
+    for _, otherplr in plrsS:GetPlayers() do
+        local prime = otherplr.Character and otherplr.Character.PrimaryPart
+        if not prime then continue end
+        local Pchar = plr.Character
+        local mag = (Pchar.PrimaryPart.CFrame.Position - prime.CFrame.Position).Magnitude
+
+        if mag > distance then continue end
+
+        local raycastResult = workspace:Raycast(
+            Pchar.PrimaryPart.CFrame.Position, 
+            prime.CFrame.Position - Pchar.PrimaryPart.CFrame.Position, 
+            rayparams
+        )
+
+        if raycastResult and raycastResult.Instance then
+            if plrsS:GetPlayerFromCharacter(raycastResult.Instance.Parent) ~= otherplr or otherplr.Character.Humanoid.Health <= 0 or otherplr.Character.Parent == nil then
+                continue
+            end
+
+            distance = mag
+            nearest = otherplr
+        end
+    end
+
+    return nearest, distance
+end
+
+local coro
+
+coro = task.spawn(function()
+    while task.wait() do
+        local pplr, dist = FindNearestPlayer()
+        if pplr == nil or dist == nil then continue end
+        plrCharacter = pplr.Character
+        if plrCharacter == nil then return end
+        local X,Y,Z = plrCharacter.PrimaryPart.Position.X, plrCharacter.PrimaryPart.Position.Y, plrCharacter.PrimaryPart.Position.Z
+        local args = {
+            vector.create(X, Y, Z),
+            true
+        }
+        if started == false then
+            plr.Character:WaitForChild("Handheld Laser Cannon"):WaitForChild("RemoteFunction"):InvokeServer(unpack(args))
+            started = true
+        end
+        plr.Character:WaitForChild("Handheld Laser Cannon"):WaitForChild("RemoteEvent3"):FireServer(unpack(args))
+    end
+end)
+
+game:GetService("UserInputService").InputBegan:Connect(function(input, p)
+    if p then return end 
+    if input.KeyCode == Enum.KeyCode.K then
+        task.cancel(coro)
+        pcall(function()
+            local pplr, dist = FindNearestPlayer()
+            plrCharacter = pplr.Character
+            if plrCharacter == nil then return end
+            local X,Y,Z = plrCharacter.PrimaryPart.Position.X, plrCharacter.PrimaryPart.Position.Y, plrCharacter.PrimaryPart.Position.Z
+            local args = {
+                    vector.create(X, Y, Z),
+                    true
+                }
+            plr.Character:WaitForChild("Handheld Laser Cannon"):WaitForChild("RemoteFunction"):InvokeServer(unpack(args))
+            end)
+        print(coro, "Coro")
+        coro = task.spawn(function()
+                while task.wait() do
+                    local pplr, dist = FindNearestPlayer()
+                    if pplr == nil or dist == nil then continue end
+                    plrCharacter = pplr.Character
+                    if plrCharacter == nil then return end
+                    local X,Y,Z = plrCharacter.PrimaryPart.Position.X, plrCharacter.PrimaryPart.Position.Y, plrCharacter.PrimaryPart.Position.Z
+                    local args = {
+                        vector.create(X, Y, Z),
+                        true
+                    }
+                    if started == false then
+                        plr.Character:WaitForChild("Handheld Laser Cannon"):WaitForChild("RemoteFunction"):InvokeServer(unpack(args))
+                        started = true
+                    end
+                    plr.Character:WaitForChild("Handheld Laser Cannon"):WaitForChild("RemoteEvent3"):FireServer(unpack(args))
+                end
+            end)
+
+        print("did something!")
+    end
+end)
+
