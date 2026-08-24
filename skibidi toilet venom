@@ -19,20 +19,19 @@ local function FindNearestPlayer()
     rayparams.FilterDescendantsInstances = {plr.Character}
     rayparams.FilterType = Enum.RaycastFilterType.Exclude
 
-    for _, otherplr in plrsS:GetPlayers() do
-
-        for _, player in ipairs(plrsS:GetPlayers()) do
-            -- Check if the player's name is inside the table
-            if table.find(DontKillThisPlrs, player.Name) then
-                continue end
-            end
+    for _, otherplr in ipairs(plrsS:GetPlayers()) do
+        if table.find(DontKillThisPlrs, otherplr.Name) then 
+            continue 
         end
+
         local prime = otherplr.Character and otherplr.Character.PrimaryPart
         if not prime then continue end
         if otherplr.Team == plr.Team then continue end
+        
         local Pchar = plr.Character
+        if not Pchar or not Pchar.PrimaryPart then continue end -- Safety check for local player
+        
         local mag = (Pchar.PrimaryPart.CFrame.Position - prime.CFrame.Position).Magnitude
-
         if mag > distance then continue end
 
         local raycastResult = workspace:Raycast(
@@ -42,7 +41,10 @@ local function FindNearestPlayer()
         )
 
         if raycastResult and raycastResult.Instance then
-            if plrsS:GetPlayerFromCharacter(raycastResult.Instance.Parent) ~= otherplr or otherplr.Character.Humanoid.Health <= 0 or otherplr.Character.Parent == nil then
+            local hitModel = raycastResult.Instance:FindFirstAncestorOfClass("Model")
+            local hitPlr = plrsS:GetPlayerFromCharacter(hitModel)
+
+            if hitPlr ~= otherplr or otherplr.Character.Humanoid.Health <= 0 or otherplr.Character.Parent == nil then
                 continue
             end
 
@@ -53,6 +55,7 @@ local function FindNearestPlayer()
 
     return nearest, distance
 end
+
 
 local coro
 
