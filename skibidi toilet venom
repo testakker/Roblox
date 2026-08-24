@@ -68,10 +68,6 @@ coro = task.spawn(function()
             end
             started = true
         end
-        local args = {
-            vector.create(X, Y, Z),
-            100
-        }
         for i=100,0,-1 do
             if string.lower(plr.Team.Name) == "alliances / humans" then
                 plr.Character:WaitForChild(tool):WaitForChild("RemoteEvent3"):FireServer(unpack(args))
