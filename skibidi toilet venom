@@ -86,8 +86,6 @@ game:GetService("UserInputService").InputBegan:Connect(function(input, p)
     if input.KeyCode == Enum.KeyCode.K then
         task.cancel(coro)
         started = false
-        print(coro, "Coro")
         Loop()
-        print("did something!")
     end
 end)
