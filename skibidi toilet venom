@@ -5,6 +5,12 @@ local plrCharacter = nil
 local tool = "Handheld Laser Cannon"
 local started = false
 
+local DontKillThisPlrs = {
+    "testakker_2",
+    "tgyurr",
+    "Ratatutyrus"
+}
+
 local function FindNearestPlayer()
     local nearest
     local distance = math.huge
@@ -14,6 +20,13 @@ local function FindNearestPlayer()
     rayparams.FilterType = Enum.RaycastFilterType.Exclude
 
     for _, otherplr in plrsS:GetPlayers() do
+
+        for _, player in ipairs(plrsS:GetPlayers()) do
+            -- Check if the player's name is inside the table
+            if table.find(DontKillThisPlrs, player.Name) then
+                continue end
+            end
+        end
         local prime = otherplr.Character and otherplr.Character.PrimaryPart
         if not prime then continue end
         if otherplr.Team == plr.Team then continue end
