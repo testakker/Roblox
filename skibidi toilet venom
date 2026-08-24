@@ -51,17 +51,16 @@ coro = task.spawn(function()
         plrCharacter = pplr.Character
         if plrCharacter == nil then return end
         local X,Y,Z = plrCharacter.PrimaryPart.Position.X, plrCharacter.PrimaryPart.Position.Y, plrCharacter.PrimaryPart.Position.Z
-        
+        local args = {
+            vector.create(X, Y, Z),
+            true
+        }
         if not plr.Character:FindFirstChild("Handheld Laser Cannon") then
             tool = "Large Laser Cannon"
         else
             tool = "Handheld Laser Cannon"
         end
         if started == false then
-            local args = {
-                    vector.create(X, Y, Z),
-                    true
-                }
             if string.lower(plr.Team.Name) == "alliances / humans" then
                 plr.Character:WaitForChild(tool):WaitForChild("RemoteFunction"):InvokeServer(unpack(args))
             else
