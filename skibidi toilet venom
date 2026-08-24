@@ -61,11 +61,19 @@ coro = task.spawn(function()
             tool = "Handheld Laser Cannon"
         end
         if started == false then
-            plr.Character:WaitForChild(tool):WaitForChild("RemoteFunction"):InvokeServer(unpack(args))
+            if string.lower(plr.Team.Name) == "alliances / humans" then
+                plr.Character:WaitForChild(tool):WaitForChild("RemoteFunction"):InvokeServer(unpack(args))
+            else
+                plr.Character:WaitForChild("RemoteFunction"):InvokeServer(unpack(args))
+            end
             started = true
         end
         for i=100,0,-1 do
-            plr.Character:WaitForChild(tool):WaitForChild("RemoteEvent3"):FireServer(unpack(args))
+            if string.lower(plr.Team.Name) == "alliances / humans" then
+                plr.Character:WaitForChild(tool):WaitForChild("RemoteEvent3"):FireServer(unpack(args))
+            else
+                plr.Character:WaitForChild("RemoteEvent3"):FireServer(unpack(args))
+            end
         end
     end
 end)
@@ -78,6 +86,8 @@ game:GetService("UserInputService").InputBegan:Connect(function(input, p)
     if input.KeyCode == Enum.KeyCode.K then
         task.cancel(coro)
         started = false
+        print(coro, "Coro")
         Loop()
+        print("did something!")
     end
 end)
