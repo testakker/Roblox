@@ -49,42 +49,52 @@ local DirtTggleVar = false
 local DirtPatchTggle = Tab:CreateToggle({
    Name = "DirtPatch",
    CurrentValue = false,
-   Flag = "DirtPatchTggle", -- A flag is the identifier for the configuration file; make sure every element has a different flag if you're using configuration saving to ensure no overlaps
+   Flag = "DirtPatchTggle",
    Callback = function(Value)
-        CurrentValue = Value
-        DirtTggleVar = CurrentValue
+        DirtTggleVar = Value
    end,
 })
 
-
-
-
-
-
-
 local function DirtPartch()
-while task.wait(.1) do
-    for i, v in workspace.Item:GetChildren() do
-        if v.Name == "DirtPatch" then
-            task.spawn(function()
-                local char = plr.Character
-                local hrp = char.HumanoidRootPart or char.PrimaryPart
-
-                if hrp and v:FindFirstChildOfClass("ProximityPrompt") and DirtTggleVar==true then
-                    local prev = hrp.Position
-                    hrp.Position = v.Position + Vector3.new(0,3,0)
-                    task.wait(1)
-                    repeat
-                    if v == nil or v.Parent ~= workspace.Item then break end
-                    fireproximityprompt(v:FindFirstChildOfClass("ProximityPrompt"))
-                    task.wait(.1)
-                    until v == nil or DirtTggleVar == false
-                    task.wait()
+    while task.wait(0.5) do
+        if not DirtTggleVar then continue end
+        
+        local itemsFolder = workspace:FindFirstChild("Item")
+        local char = game.Players.LocalPlayer.Character
+        local hrp = char and (char:FindFirstChild("HumanoidRootPart") or char.PrimaryPart)
+        
+        if itemsFolder and hrp then
+            for i, v in pairs(itemsFolder:GetChildren()) do
+                if not DirtTggleVar then break end 
+                
+                if v.Name == "DirtPatch" and v.Parent == itemsFolder then
+                    local prompt = v:FindFirstChildOfClass("ProximityPrompt")
+                    
+                    if prompt and prompt.Enabled then
+                        local previousPosition = hrp.CFrame
+                        
+                        hrp.CFrame = CFrame.new(v.Position + Vector3.new(0, 3, 0))
+                        
+                        task.wait(0.2)
+                        
+                        repeat
+                            if not DirtTggleVar or not v or v.Parent ~= itemsFolder or not prompt.Enabled then 
+                                break 
+                            end
+                            
+                            pcall(function()
+                                fireproximityprompt(prompt)
+                            end)
+                            
+                            task.wait(0.15) -- Безопасная скорость отправки пакетов, которую одобряет сервер
+                        until not v or v.Parent ~= itemsFolder or not DirtTggleVar
+                        
+                        task.wait(0.1)
+                    end
                 end
-            end)
+            end
         end
     end
-end
 end
 
 task.spawn(DirtPartch)
