@@ -86,7 +86,7 @@ local function DirtPartch()
                                 fireproximityprompt(prompt)
                             end)
                             
-                            task.wait(0.15) -- Безопасная скорость отправки пакетов, которую одобряет сервер
+                            task.wait(0.1)
                         until not v or v.Parent ~= itemsFolder or not DirtTggleVar
                         
                         task.wait(0.1)
