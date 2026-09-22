@@ -60,7 +60,7 @@ local DirtPatchTggle = FarmTab:CreateToggle({
 })
 
 local AutoBoxTggle = FarmTab:CreateToggle({
-   Name = "Auto open Boxes",
+   Name = "Auto open Boxes (Turn off DirtPatch auto farm for more stability)",
    CurrentValue = false,
    Flag = "AutoBoxTggle",
    Callback = function(Value)
@@ -69,7 +69,7 @@ local AutoBoxTggle = FarmTab:CreateToggle({
 })
 
 local AutoChestTggle = FarmTab:CreateToggle({
-   Name = "Auto open chests",
+   Name = "Auto open Chests",
    CurrentValue = false,
    Flag = "AutoChestTggle",
    Callback = function(Value)
