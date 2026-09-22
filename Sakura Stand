@@ -41,12 +41,16 @@ local Window = Rayfield:CreateWindow({
    }
 })
 Rayfield:SetVisibility(true)
-local Tab = Window:CreateTab("DirtPatch", 4483362458) -- Title, Image
+local FarmTab = Window:CreateTab("Auto farm", 4483362458) -- Title, Image
 
 
 local DirtTggleVar = false
+local AutoBox = false
+local AutoChest = false
 
-local DirtPatchTggle = Tab:CreateToggle({
+local itemsFolder = workspace:FindFirstChild("Item")
+
+local DirtPatchTggle = FarmTab:CreateToggle({
    Name = "DirtPatch",
    CurrentValue = false,
    Flag = "DirtPatchTggle",
@@ -55,11 +59,28 @@ local DirtPatchTggle = Tab:CreateToggle({
    end,
 })
 
+local AutoBoxTggle = FarmTab:CreateToggle({
+   Name = "Auto open Boxes",
+   CurrentValue = false,
+   Flag = "AutoBoxTggle",
+   Callback = function(Value)
+        AutoBox = Value
+   end,
+})
+
+local AutoChestTggle = FarmTab:CreateToggle({
+   Name = "Auto open chests",
+   CurrentValue = false,
+   Flag = "AutoChestTggle",
+   Callback = function(Value)
+        AutoChest = Value
+   end,
+})
+
 local function DirtPartch()
     while task.wait(0.5) do
         if not DirtTggleVar then continue end
         
-        local itemsFolder = workspace:FindFirstChild("Item")
         local char = game.Players.LocalPlayer.Character
         local hrp = char and (char:FindFirstChild("HumanoidRootPart") or char.PrimaryPart)
         
@@ -97,6 +118,51 @@ local function DirtPartch()
     end
 end
 
+local function autobox()
+   while task.wait(0.5) do
+      if not AutoBox or (not AutoBox and not AutoChest) then continue end
+      
+      local char = game.Players.LocalPlayer.Character
+      local hrp = char and (char:FindFirstChild("HumanoidRootPart") or char.PrimaryPart)
+
+      if itemsFolder and hrp then
+         for i, v in pairs(itemsFolder:GetChildren()) do
+               if not AutoBox or (not AutoBox and not AutoChest) then break end 
+
+               local HASchestKey = function()
+                     if game.Players.LocalPlayer.Backpack:FindFirstChild("Chest Key") or char:FindFirstChild("Chest Key") then return true end 
+                     return false
+               end
+
+               if HASchestKey and AutoChest then
+                  if v.Name == "Chest" then
+                    pcall(function()
+                        hrp.CFrame = CFrame.new(v.Position + Vector3.new(1, 0, 0))
+                        v.ProximityPrompt.HoldDuration = 0; 
+                        task.wait(0.3); 
+                        fireproximityprompt(v.ProximityPrompt); 
+                        task.wait(0.1) 
+                    end)
+                  end
+               end
+
+               if v.Name == "Box" and v.Parent == itemsFolder then
+                pcall(function()
+                  local prompt = v:FindFirstChildOfClass("ProximityPrompt")
+                  hrp.CFrame = CFrame.new(v.Position + Vector3.new(1, 0, 0))
+                  prompt.HoldDuration = 0; 
+                  task.wait(0.3); 
+                  fireproximityprompt(prompt); 
+                  task.wait(0.1) 
+                end)
+               end
+            end
+        end
+
+   end
+end
+
 task.spawn(DirtPartch)
+task.spawn(autobox)
 
 Rayfield:LoadConfiguration()
