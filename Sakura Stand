@@ -44,6 +44,7 @@ Rayfield:SetVisibility(true)
 local FarmTab = Window:CreateTab("Auto farm", 4483362458) -- Title, Image
 local MovementTab = Window:CreateTab("Movement", 4483362458)
 local TeleportTab = Window:CreateTab("Teleport", 4483362458)
+local FunTab = Window:CreateTab("Fun", 4483362458)
 
 -------------------------FARM
 
@@ -85,6 +86,13 @@ for _, f in pairs(getgc()) do
         end
     end
 ]]
+
+-------------------------Teleport
+
+-------------------------Fun
+
+local chance = 1000
+local cd = 0.5
 
 -------------------------FARM
 
@@ -418,5 +426,94 @@ end
 task.spawn(JumpCdfunc)
 task.spawn(SpeedM)
 task.spawn(JumpM)
+
+local fun = false
+
+local roll = math.random(1,5)
+if roll == 4 then
+    fun = true
+    print(":3")
+end
+
+local funtgg = FunTab:CreateToggle({
+   Name = "Enable fun option (1/1000 chance to happen every 0.1 sec)",
+   CurrentValue = fun,
+   Flag = "FunTggle",
+   Callback = function(Value)
+        fun = Value
+   end,
+})
+
+local function FunScreen()
+    local sc = Instance.new("ScreenGui", game:GetService("CoreGui"))
+    sc.IgnoreGuiInset = true
+    sc.DisplayOrder = 999999
+    local a = math.random(0,2)
+
+    pcall(function()
+        for i=3,0,-1 do
+        local i1 = Instance.new("ImageLabel", sc)
+        i1.Name = "IMAGEPRELOAD"
+        i1.Size = Udim2.new(0.01, 0,0.01,0)
+        i1.ImageTransparency = 0.99
+        i1.BackgroundTransparency = 0.99
+        if i == 3 then
+            i1.Image = "rbxassetid://103256463762327"
+        elseif i == 2 then
+            i1.Image = "rbxassetid://83727591292045"
+        elseif i == 1 then
+            i1.Image = "rbxassetid://5770231146"
+        end
+        end
+        task.wait(0.2)
+        sc:ClearAllChildren()
+    end)
+    pcall(function()
+        local Img = Instance.new("ImageLabel", sc)
+        Img.Interactable = false
+
+        Img.Size = UDim2.new(1,0,1,0)
+        Img.Position = UDim2.new(0.5,0,0.5,0)
+        Img.AnchorPoint = Vector2.new(0.5,0.5)
+
+        if a == 0 then 
+        Img.Image = "rbxassetid://103256463762327"
+        elseif a == 1 then 
+            Img.Image = "rbxassetid://83727591292045"
+        elseif a == 2 then
+            Img.Image = "rbxassetid://5770231146"
+        end
+        local s = Instance.new("Sound", Img)
+        if a == 0 then 
+        s.SoundId = "rbxassetid://105914998625530"
+        elseif a == 1 then 
+        s.SoundId = "rbxassetid://17155462353"
+        elseif a == 2 then
+        s.SoundId = "rbxassetid://131322552285286"
+        end
+        s.Volume = 5
+        if a == 0 then
+            s.TimePosition = 0.8
+        end
+        s:Play()
+    end)
+    task.wait(1.2)
+    sc:destroy()
+    end
+
+local function funnFunc()
+    while task.wait(.1) do
+        if fun then
+            local lucky = math.random(1, 500)
+            if lucky == 1 then
+                FunScreen()
+            else
+                print("You are safe..")
+            end
+        end
+    end
+end
+
+task.spawn(funnFunc())
 
 Rayfield:LoadConfiguration()
