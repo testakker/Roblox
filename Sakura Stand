@@ -47,8 +47,21 @@ local FarmTab = Window:CreateTab("Auto farm", 4483362458) -- Title, Image
 local DirtTggleVar = false
 local AutoBox = false
 local AutoChest = false
+local AutoSellRokakaka = false
+local Test = false
 
 local itemsFolder = workspace:FindFirstChild("Item")
+
+local function FindStandInStorageSlot(standName)
+    for _, v in game:GetService("Players").LocalPlayer.PlayerGui.StandStorage.Outer.Inner.Inner:GetChildren() do
+        if v:IsA("ImageButton") and string.find(v.Name, "Slot") then
+            local label = v.Text
+            string.split(v.Name, "Slot")
+            if label.Text == tostring(standName) then return true, v.Name end
+        end
+    end
+    return false
+end
 
 local DirtPatchTggle = FarmTab:CreateToggle({
    Name = "DirtPatch",
@@ -75,6 +88,42 @@ local AutoChestTggle = FarmTab:CreateToggle({
    Callback = function(Value)
         AutoChest = Value
    end,
+})
+
+local AutoSellRokakakaTggle = FarmTab:CreateToggle({
+   Name = "Auto Sell Rokakaka",
+   CurrentValue = false,
+   Flag = "AutoSellRokakakaTggle",
+   Callback = function(Value)
+        AutoSellRokakaka = Value
+   end,
+})
+
+local CheckStuffIdk = FarmTab:CreateToggle({
+    Name = "Idk, for tests",
+    CurrentValue = false,
+    Flag = "TEST",
+    Callback = function(Value)
+        Test = Value
+        if Test then
+            local result, slotname = FindStandInStorageSlot("Standless")
+            --tonumber(string.sub(v.Name, 5))
+            --  -9509, 806, 9039
+            if result and slotname then
+                local char = game:GetService("Players").LocalPlayer.Character
+                local Kuzma = workspace.Map.NPCs:FindFirstChild("Kuzma")
+                if Kuzma then
+                    local prev = char.HumanoidRootPart.Position
+                    local to = Vector3.new(-9509, 806, 9039)
+                    char.HumanoidRootPart.Position = to
+                    task.wait(.2)
+                    local Event = game:GetService("ReplicatedStorage").StorageRemote[tostring(slotname)]
+                    Event:FireServer()
+                end
+
+            end
+        end
+    end,
 })
 
 local function DirtPartch()
@@ -120,41 +169,42 @@ end
 
 local function autobox()
    while task.wait(0.5) do
-      if not AutoBox or (not AutoBox and not AutoChest) then continue end
+      if (not AutoBox and not AutoChest) then continue end
       
       local char = game.Players.LocalPlayer.Character
       local hrp = char and (char:FindFirstChild("HumanoidRootPart") or char.PrimaryPart)
 
       if itemsFolder and hrp then
          for i, v in pairs(itemsFolder:GetChildren()) do
-               if not AutoBox or (not AutoBox and not AutoChest) then break end 
+               if (not AutoBox and not AutoChest) then break end 
 
                local HASchestKey = function()
-                     if game.Players.LocalPlayer.Backpack:FindFirstChild("Chest Key") or char:FindFirstChild("Chest Key") then return true end 
+                     if game.Players.LocalPlayer.Backpack:FindFirstChild("Chest Key") or char:FindFirstChild("Chest Key") then print("Key!"); return true end 
                      return false
                end
 
-               if HASchestKey and AutoChest then
+               if HASchestKey == true and AutoChest then
                   if v.Name == "Chest" then
-                    pcall(function()
-                        hrp.CFrame = CFrame.new(v.Position + Vector3.new(1, 0, 0))
-                        v.ProximityPrompt.HoldDuration = 0; 
-                        task.wait(0.3); 
-                        fireproximityprompt(v.ProximityPrompt); 
-                        task.wait(0.1) 
-                    end)
+                    print("Key!");
+                        pcall(function()
+                            hrp.CFrame = CFrame.new(v.Position + Vector3.new(1, 0, 0))
+                            v.ProximityPrompt.HoldDuration = 0; 
+                            task.wait(0.3); 
+                            fireproximityprompt(v.ProximityPrompt); 
+                            task.wait(0.1) 
+                        end)
                   end
                end
 
-               if v.Name == "Box" and v.Parent == itemsFolder then
-                pcall(function()
-                  local prompt = v:FindFirstChildOfClass("ProximityPrompt")
-                  hrp.CFrame = CFrame.new(v.Position + Vector3.new(1, 0, 0))
-                  prompt.HoldDuration = 0; 
-                  task.wait(0.3); 
-                  fireproximityprompt(prompt); 
-                  task.wait(0.1) 
-                end)
+               if v.Name == "Box" and v.Parent == itemsFolder and AutoBox then
+                    pcall(function()
+                        local prompt = v:FindFirstChildOfClass("ProximityPrompt")
+                        hrp.CFrame = CFrame.new(v.Position + Vector3.new(1, 0, 0))
+                        prompt.HoldDuration = 0; 
+                        task.wait(0.3); 
+                        fireproximityprompt(prompt); 
+                        task.wait(0.1) 
+                    end)
                end
             end
         end
@@ -162,7 +212,19 @@ local function autobox()
    end
 end
 
+local function autosellrokakaka()
+    while task.wait(.2) do
+        if AutoSellRokakaka and (game.Players.LocalPlayer.Backpack:FindFirstChild("Rokakaka") or game.Players.LocalPlayer.Character:FindFirstChild("Rokakaka")) then
+            local Event = game:GetService("ReplicatedStorage").GlobalUsedRemotes.SellItem
+            Event:FireServer(
+                "Rokakaka"
+            )
+        end
+    end
+end
+
 task.spawn(DirtPartch)
 task.spawn(autobox)
+task.spawn(autosellrokakaka)
 
 Rayfield:LoadConfiguration()
