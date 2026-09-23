@@ -42,13 +42,51 @@ local Window = Rayfield:CreateWindow({
 })
 Rayfield:SetVisibility(true)
 local FarmTab = Window:CreateTab("Auto farm", 4483362458) -- Title, Image
+local MovementTab = Window:CreateTab("Movement", 4483362458)
+local TeleportTab = Window:CreateTab("Teleport", 4483362458)
 
+-------------------------FARM
 
 local DirtTggleVar = false
 local AutoBox = false
 local AutoChest = false
 local AutoSellRokakaka = false
 local Test = false
+
+-------------------------Movement
+
+local JumpEnabled = false
+local JumpCooldown = 0.5  --0.5 Default
+
+local MovementSpeedEnabled = false
+local MovementSpeed = 16  --16 Default
+
+local SpeedMulti = 1      --1 Default
+local JumpMulti = 1       --1 Default
+local JumpMulVar = false
+
+--[[
+for _, f in pairs(getgc()) do
+        if type(f) == "function" and islclosure(f) then
+            local info = debug.info(f, "s")
+            
+            if string.find(info, "JumpCooldown") then
+                local upvalues = debug.getupvalues(f)
+                
+                for idx, value in pairs(upvalues) do
+                    if type(value) == "number" then
+                        print(value)
+                                                
+                        debug.setupvalue(f, idx, 0)
+                        return true
+                    end
+                end
+            end
+        end
+    end
+]]
+
+-------------------------FARM
 
 local itemsFolder = workspace:FindFirstChild("Item")
 
@@ -156,6 +194,7 @@ local function DirtPartch()
                             
                             pcall(function()
                                 fireproximityprompt(prompt)
+                                hrp.CFrame = CFrame.new(v.Position + Vector3.new(0, 3, 0))
                             end)
                             
                             task.wait(0.1)
@@ -216,7 +255,7 @@ end
 
 local function autosellrokakaka()
     while task.wait(.2) do
-        if AutoSellRokakaka and (game.Players.LocalPlayer.Backpack:FindFirstChild("Rokakaka") or game.Players.LocalPlayer.Character:FindFirstChild("Rokakaka")) then
+        if AutoSellRokakaka and game.Players.LocalPlayer:FindFirstChild("Backpack") and (game.Players.LocalPlayer.Backpack:FindFirstChild("Rokakaka") or game.Players.LocalPlayer.Character:FindFirstChild("Rokakaka")) then
             local Event = game:GetService("ReplicatedStorage").GlobalUsedRemotes.SellItem
             Event:FireServer(
                 "Rokakaka"
@@ -225,8 +264,159 @@ local function autosellrokakaka()
     end
 end
 
+
+
+-------------------------Movement
+--[[
+local JumpEnabled = false
+local JumpCooldown = 0.5  --0.5 Default
+
+local MovementSpeedEnabled = false
+local MovementSpeed = 16  --16 Default
+
+local SpeedMulti = 1      --1 Default
+local JumpMulti = 1       --1 Default
+local JumpMulVar = false
+]]
+local JumpTggle = MovementTab:CreateToggle({
+   Name = "Enable Custom Jump Cooldown",
+   CurrentValue = false,
+   Flag = "CustomJumpTggle",
+   Callback = function(Value)
+        JumpEnabled = Value
+   end,
+})
+
+local JumpSlider = MovementTab:CreateSlider({
+    Name = "Custom Jump Cooldown",
+    Range = {0, 0.5},
+    Increment = 0.05,
+    Suffix = "Jump cd",
+    CurrentValue = 0.5, 
+    Flag = "JumpCdSlider",
+    Callback = function(Value)
+        JumpCooldown = Value
+    end,
+})
+
+local SpeedTggle = MovementTab:CreateToggle({
+   Name = "Enable Custom Movement Speed Multiplier",
+   CurrentValue = false,
+   Flag = "CustomSpeedTggle",
+   Callback = function(Value)
+        MovementSpeedEnabled = Value
+   end,
+})
+
+local SpeedSlider = MovementTab:CreateSlider({
+    Name = "Custom Movement Speed Multiplier",
+    Range = {1, 10},
+    Increment = 0.1,
+    Suffix = "Speed",
+    CurrentValue = 1, 
+    Flag = "SpeedSlider",
+    Callback = function(Value)
+        SpeedMulti = Value
+    end,
+})
+
+local JumpMulTggle = MovementTab:CreateToggle({
+   Name = "Enable Custom Jump Power Multiplier",
+   CurrentValue = false,
+   Flag = "CustomJumpPwrTggle",
+   Callback = function(Value)
+        JumpMulVar = Value
+   end,
+})
+
+local JumpMulSlider = MovementTab:CreateSlider({
+    Name = "Custom Jump Power Multiplier",
+    Range = {1, 10},
+    Increment = 0.1,
+    Suffix = "Jump Power",
+    CurrentValue = 1, 
+    Flag = "JumpPwrSlider",
+    Callback = function(Value)
+        JumpMulti = Value
+    end,
+})
+
 task.spawn(DirtPartch)
 task.spawn(autobox)
 task.spawn(autosellrokakaka)
+
+local l = false
+
+local function JumpCdfunc()
+    while task.wait(.1) do
+        if JumpEnabled then
+            l = false
+            for _, f in pairs(getgc()) do
+                if type(f) == "function" and islclosure(f) then
+                    local info = debug.info(f, "s")
+                    
+                    if string.find(info, "JumpCooldown") then
+                        local upvalues = debug.getupvalues(f)
+                        
+                        for idx, value in pairs(upvalues) do
+                            if type(value) == "number" then
+                                                        
+                                debug.setupvalue(f, idx, JumpCooldown)
+                            end
+                        end
+                    end
+                end
+            end
+        else
+            if l == false then
+
+
+            for _, f in pairs(getgc()) do
+                if type(f) == "function" and islclosure(f) then
+                    local info = debug.info(f, "s")
+                    
+                    if string.find(info, "JumpCooldown") then
+                        local upvalues = debug.getupvalues(f)
+                        
+                        for idx, value in pairs(upvalues) do
+                            if type(value) == "number" then
+                                                        
+                                debug.setupvalue(f, idx, 0.5)
+                                l = true
+                            end
+                        end
+                    end
+                end
+            end
+
+
+            end
+        end
+    end
+end
+
+local function SpeedM()
+    while task.wait(.1) do
+        if MovementSpeedEnabled then
+            plr.Character:SetAttribute("SpeedMulti", SpeedMulti)
+        else
+            plr.Character:SetAttribute("SpeedMulti", 1)
+        end
+    end
+end
+
+local function JumpM()
+    while task.wait(.1) do
+        if JumpMulVar then
+            plr.Character:SetAttribute("JumpMulti", JumpMulti)
+        else
+            plr.Character:SetAttribute("JumpMulti", 1)
+        end
+    end
+end 
+
+task.spawn(JumpCdfunc)
+task.spawn(SpeedM)
+task.spawn(JumpM)
 
 Rayfield:LoadConfiguration()
