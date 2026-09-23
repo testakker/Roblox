@@ -119,6 +119,8 @@ local CheckStuffIdk = FarmTab:CreateToggle({
                     task.wait(.2)
                     local Event = game:GetService("ReplicatedStorage").StorageRemote[tostring(slotname)]
                     Event:FireServer()
+                    task.wait(.4)
+                    game:GetService("Players").LocalPlayer.Character.HumanoidRootPart.Position = Kuzma.HumanoidRootPart.Position
                 end
 
             end
