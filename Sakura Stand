@@ -504,7 +504,7 @@ local function FunScreen()
 local function funnFunc()
     while task.wait(.1) do
         if fun then
-            local lucky = math.random(1, 500)
+            local lucky = math.random(1, 1000)
             if lucky == 1 then
                 FunScreen()
             else
