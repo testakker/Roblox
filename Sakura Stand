@@ -41,6 +41,103 @@ local Window = Rayfield:CreateWindow({
    }
 })
 Rayfield:SetVisibility(true)
+local Workspace = game:GetService("Workspace")
+local ReplicatedStorage = game:GetService("ReplicatedStorage")
+local VIM = game:GetService("VirtualInputManager")
+
+local StandNameList: ModuleScript = require(ReplicatedStorage["ABC - First Priority"].StandName)
+local Quests = require((ReplicatedStorage:WaitForChild("ABC - First Priority")):WaitForChild("Quests"))
+local Data: Folder = plr.Data
+local QuestFolder: Folder = plr.QuestFolder
+local cooldownFolder: Folder = plr.WhyIsItHere
+local QuestName = "None"
+
+--------------------------------------------------------MAIN FUNCTIONS!
+
+local function UseKey(key, holdOrUnhold)
+if holdOrUnhold == nil then
+VIM:SendKeyEvent(true, key, false, game)
+task.wait()
+VIM:SendKeyEvent(false, key, false, game)
+elseif holdOrUnhold == "Hold" then
+    VIM:SendKeyEvent(true, key, false, game)
+elseif holdOrUnhold == "Unhold" then
+    VIM:SendKeyEvent(false, key, false, game)
+end
+end
+
+local function UseMouseInput(key)
+    local keys = {
+        ["left"] = 0,
+        ["right"] = 1,
+        ["middle"] = 2,
+    }
+
+    local tolowstrkey = string.lower(key)
+
+    if keys[tolowstrkey] then
+        local KEY = tonumber(keys[tolowstrkey])
+        VIM:SendMouseButtonEvent(0,0, KEY ,true,game.Players.LocalPlayer,1)
+        task.wait(0.1)
+        VIM:SendMouseButtonEvent(0,0, KEY ,false,game.Players.LocalPlayer,1)
+    end
+end
+
+local function FindStandInStorageSlot(standName: string, countEquipped: boolean)
+    local nameToId = tonumber(table.find(StandNameList, tostring(standName)))
+    local currentStandId = tonumber(Data.Stand.Value)
+    local foundSlotId = nil
+    if countEquipped and not currentStandId == nameToId or countEquipped and currentStandId == nameToId or not countEquipped and not currentStandId == nameToId then
+        for _, v in Data:GetChildren() do
+            if v:IsA("IntValue") and string.find(v.Name, "Slot") then
+                if v.Value == nameToId then
+                    foundSlotId = tonumber(v.Name)
+                end
+            end
+        end
+    end
+
+    return foundSlotId
+end
+
+local function StartAnubisQuest()
+    if Data.Cash.Value < 1000 then return "Broke" end
+    for i, v in QuestFolder:GetChildren() do if v:GetAttribute("Name") == "The Anubis" or v.Name == "1" then QuestName = v.Name; return "We alredy has one", QuestName end end
+    
+    local CheckQuestEvent = ReplicatedStorage.QuestRemotes.CheckQuest
+    local AcceptQuestEvent = ReplicatedStorage.QuestRemotes.AcceptQuest
+
+    CheckQuestEvent:FireServer(5)
+    AcceptQuestEvent:FireServer(1)
+    QuestName = "1"
+    return "Started!", QuestName
+end
+
+local function FindMyPlayerCharacter()
+    local character = plr.Character
+    if not character or not character.Parent then
+        character = plr.CharacterAdded:Wait()
+    end
+    
+    local humanoid = character:WaitForChild("Humanoid", 5)
+    local rootPart = character:WaitForChild("HumanoidRootPart", 5)
+    local head     = character:WaitForChild("Head", 5)
+    
+    local torso = character:FindFirstChild("Torso") or character:FindFirstChild("UpperTorso")
+    if not torso then
+        torso = character:WaitForChild("Torso", 5) or character:WaitForChild("UpperTorso", 5)
+    end
+    
+    if humanoid and rootPart and head and torso then
+        return character, humanoid, rootPart, head, torso
+    else
+        q = false
+        return nil
+    end
+end
+
+--------------------------------------------------------MAIN FUNCTIONS! END
+
 local FarmTab = Window:CreateTab("Auto farm", 4483362458) -- Title, Image
 local MovementTab = Window:CreateTab("Movement", 4483362458)
 local TeleportTab = Window:CreateTab("Teleport", 4483362458)
@@ -65,6 +162,9 @@ local MovementSpeed = 16  --16 Default
 local SpeedMulti = 1      --1 Default
 local JumpMulti = 1       --1 Default
 local JumpMulVar = false
+
+local ChangeBackWalk = false
+local ChangeBackJump = false
 
 --[[
 for _, f in pairs(getgc()) do
@@ -97,7 +197,7 @@ local cd = 0.5
 -------------------------FARM
 
 local itemsFolder = workspace:FindFirstChild("Item")
-
+--[[
 local function FindStandInStorageSlot(standName)
     for _, v in game:GetService("Players").LocalPlayer.PlayerGui.StandStorage.Outer.Inner.Inner:GetChildren() do
         if v:IsA("ImageButton") and string.find(v.Name, "Slot") then
@@ -108,7 +208,7 @@ local function FindStandInStorageSlot(standName)
     end
     return false
 end
-
+--]]
 local DirtPatchTggle = FarmTab:CreateToggle({
    Name = "DirtPatch",
    CurrentValue = false,
@@ -128,7 +228,7 @@ local AutoBoxTggle = FarmTab:CreateToggle({
 })
 
 local AutoChestTggle = FarmTab:CreateToggle({
-   Name = "Auto open Chests",
+   Name = "Auto open Chests (Currently not working, fix will be soon)",
    CurrentValue = false,
    Flag = "AutoChestTggle",
    Callback = function(Value)
@@ -137,7 +237,7 @@ local AutoChestTggle = FarmTab:CreateToggle({
 })
 
 local AutoSellRokakakaTggle = FarmTab:CreateToggle({
-   Name = "Auto Sell Rokakaka",
+   Name = "Auto Sell Rokakaka (More sell items will be added)",
    CurrentValue = false,
    Flag = "AutoSellRokakakaTggle",
    Callback = function(Value)
@@ -145,8 +245,9 @@ local AutoSellRokakakaTggle = FarmTab:CreateToggle({
    end,
 })
 
+--[[
 local CheckStuffIdk = FarmTab:CreateToggle({
-    Name = "Idk, for tests",
+    Name = "Idk, for tests (Buggy and can cause error, breaks script)",
     CurrentValue = false,
     Flag = "TEST",
     Callback = function(Value)
@@ -173,13 +274,12 @@ local CheckStuffIdk = FarmTab:CreateToggle({
         end
     end,
 })
-
+--]]
 local function DirtPartch()
     while task.wait(0.5) do
         if not DirtTggleVar then continue end
         
-        local char = game.Players.LocalPlayer.Character
-        local hrp = char and (char:FindFirstChild("HumanoidRootPart") or char.PrimaryPart)
+        local char, humanoid, hrp, head, torso = FindMyPlayerCharacter()
         
         if itemsFolder and hrp then
             for i, v in pairs(itemsFolder:GetChildren()) do
@@ -220,11 +320,10 @@ local function autobox()
    while task.wait(0.5) do
       if (not AutoBox and not AutoChest) then continue end
       
-      local char = game.Players.LocalPlayer.Character
-      local hrp = char and (char:FindFirstChild("HumanoidRootPart") or char.PrimaryPart)
+        local char, humanoid, hrp, head, torso = FindMyPlayerCharacter()
 
-      if itemsFolder and hrp then
-         for i, v in pairs(itemsFolder:GetChildren()) do
+        if itemsFolder and hrp then
+            for i, v in pairs(itemsFolder:GetChildren()) do
                if (not AutoBox and not AutoChest) then break end 
 
                local HASchestKey = function()
@@ -349,55 +448,109 @@ local JumpMulSlider = MovementTab:CreateSlider({
     end,
 })
 
+local ResetTo16SpeedTggle = MovementTab:CreateToggle({
+   Name = "Reset BASE movement speed to 16, if it goes below (this can cause blocking or some moves)",
+   CurrentValue = false,
+   Flag = "ResetTo16Speed",
+   Callback = function(Value)
+        ChangeBackWalk = Value
+   end,
+})
+
+local ResetTo50JumpTggle = MovementTab:CreateToggle({
+   Name = "Reset BASE jump power to 50, if it goes below (this can cause blocking or some moves)",
+   CurrentValue = false,
+   Flag = "ResetTo50Jump",
+   Callback = function(Value)
+        ChangeBackJump = Value
+   end,
+})
+
+local currWalk16: RBXScriptConnection = nil
+local currJump50: RBXScriptConnection = nil
+
+task.spawn(function()
+while task.wait(1) do
+local char, humanoid, hrp, head, torso = FindMyPlayerCharacter()
+if char:GetAttribute("AlredyChangedWalk") then continue end
+if currWalk16 then currWalk16:Disconnect(); currWalk16 = nil end
+char:SetAttribute("AlredyChangedWalk", true)
+currWalk16 = char.UsedValues.OriginalWalkSpeed.Changed:Connect(function(val)
+if ChangeBackWalk and val ~= 16 then
+char.UsedValues.OriginalWalkSpeed.Value = 16
+end
+end)
+end
+end)
+task.spawn(function()
+while task.wait(1) do
+local char, humanoid, hrp, head, torso = FindMyPlayerCharacter()
+if char:GetAttribute("AlredyChangeJump") then continue end
+if currJump50 then currJump50:Disconnect(); currJump50 = nil end
+char:SetAttribute("AlredyChangeJump", true)
+currJump50 = char.UsedValues.OriginalJumpPower.Changed:Connect(function(val)
+if ChangeBackWalk and val ~= 50 then
+char.UsedValues.OriginalJumpPower.Value = 50
+end
+end)
+end
+end)
+
+
 task.spawn(DirtPartch)
 task.spawn(autobox)
 task.spawn(autosellrokakaka)
 
 local l = false
+local q = false
+
+local targetRenderSteppedFunc = nil 
+local lastAppliedCooldown = nil
+local function getJumpFunctionSafe()
+    if targetRenderSteppedFunc then 
+        return targetRenderSteppedFunc 
+    end
+    
+    for _, f in pairs(getgc()) do
+        if type(f) == "function" and islclosure(f) then
+            local source = debug.info(f, "s")
+            if source and string.find(source, "JumpCooldown") then
+                local upvalues = debug.getupvalues(f)
+                if #upvalues >= 4 then
+                    targetRenderSteppedFunc = f
+                    return f
+                end
+            end
+        end
+    end
+    return nil
+end
 
 local function JumpCdfunc()
     while task.wait(.1) do
+        local char, humanoid, hrp, head, torso = FindMyPlayerCharacter()
+
+        if not char or not humanoid or humanoid.Health <= 0 then
+            targetRenderSteppedFunc = nil 
+            lastAppliedCooldown = nil
+            continue 
+        end
+        
         if JumpEnabled then
-            l = false
-            for _, f in pairs(getgc()) do
-                if type(f) == "function" and islclosure(f) then
-                    local info = debug.info(f, "s")
-                    
-                    if string.find(info, "JumpCooldown") then
-                        local upvalues = debug.getupvalues(f)
-                        
-                        for idx, value in pairs(upvalues) do
-                            if type(value) == "number" then
-                                                        
-                                debug.setupvalue(f, idx, JumpCooldown)
-                            end
-                        end
-                    end
+            if lastAppliedCooldown ~= JumpCooldown then
+                local f = getJumpFunctionSafe()
+                if f then
+                    debug.setupvalue(f, 4, JumpCooldown)
+                    lastAppliedCooldown = JumpCooldown
                 end
             end
         else
-            if l == false then
-
-
-            for _, f in pairs(getgc()) do
-                if type(f) == "function" and islclosure(f) then
-                    local info = debug.info(f, "s")
-                    
-                    if string.find(info, "JumpCooldown") then
-                        local upvalues = debug.getupvalues(f)
-                        
-                        for idx, value in pairs(upvalues) do
-                            if type(value) == "number" then
-                                                        
-                                debug.setupvalue(f, idx, 0.5)
-                                l = true
-                            end
-                        end
-                    end
+            if lastAppliedCooldown ~= 0.5 then
+                local f = getJumpFunctionSafe()
+                if f then
+                    debug.setupvalue(f, 4, 0.5)
+                    lastAppliedCooldown = 0.5
                 end
-            end
-
-
             end
         end
     end
@@ -516,4 +669,18 @@ end
 
 task.spawn(funnFunc())
 
+local Dropdown = MovementTab:CreateDropdown({
+   Name = "Dropdown Example",
+   Options = {"Disable slowing on stun", "Disable slowing on attacks/m1", "Disable slowing on getting grabbed", "Disable slowing on 'Slow' status", "Disable slowing after using some moves"},
+   CurrentOption = {"Disable slowing on stun"},
+   MultipleOptions = true,
+   Flag = "Dropdown1", -- A flag is the identifier for the configuration file; make sure every element has a different flag if you're using configuration saving to ensure no overlaps
+   Callback = function(Options)
+   CurrentOption = Options
+   print(Options)
+   -- The function that takes place when the selected option is changed
+   -- The variable (Options) is a table of strings for the current selected options
+   end,
+})
+Dropdown:Set({"Disable slowing on attacks/m1"})
 Rayfield:LoadConfiguration()
