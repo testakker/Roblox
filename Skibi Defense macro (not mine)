@@ -74,4 +74,4 @@ pcall(createLQButton)
 notifyLoad()
 
 -- Ð¢Ð’ÐžÐ¯ Ð˜Ð¡Ð¢Ð˜ÐÐÐÐ¯ Ð¡Ð¡Ð«Ð›ÐšÐ ÐÐ ÐœÐÐšÐ ÐžÐ¡ (ÐŸÐ ÐžÐ¢Ð˜Ð’ Ð’Ð«Ð›Ð•Ð¢ÐžÐ’):
-loadstring(game:HttpGet("https://raw.githubusercontent.com/KeroTwT/Kero-Hub/refs/heads/main/Skibidi%20Defense"))()
+loadstring(game:HttpGet("https://raw.githubusercontent.com/testakker/Roblox/refs/heads/main/Actual%20Skibi%20Defense%20macro"))()
