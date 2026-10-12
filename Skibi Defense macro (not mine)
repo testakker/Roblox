@@ -1,0 +1,77 @@
+--====================================================================--
+--  SKIBI DEFENSE MACRO HUB [AUTOEXEC & MOBILE OPTIMIZED]             --
+--  Modified & Enhanced by: A_smart_man_official (via AI)            --
+--  Version: 1.1 [LOW QUALITY BUTTON ADDED]                           --
+--====================================================================--
+
+if not game:IsLoaded() then game.Loaded:Wait() end 
+task.wait(7)
+
+local Players = game:GetService("Players") 
+local player = Players.LocalPlayer or Players.PlayerAdded:Wait()
+
+-- Ð¤ÑƒÐ½ÐºÑ†Ð¸Ñ Ð·Ð²ÑƒÐºÐ¾Ð²Ð¾Ð³Ð¾ Ð¸ Ñ‚ÐµÐºÑÑ‚Ð¾Ð²Ð¾Ð³Ð¾ Ð¾Ð¿Ð¾Ð²ÐµÑ‰ÐµÐ½Ð¸Ñ
+local function notifyLoad()
+    local sound = Instance.new("Sound")
+    sound.SoundId = "rbxassetid://1053246915" 
+    sound.Volume = 1
+    sound.Parent = game:GetService("SoundService")
+    sound:Play()
+    
+    game:GetService("StarterGui"):SetCore("SendNotification", {
+        Title = "ÐœÐ°ÐºÑ€Ð¾Ñ Ð—Ð°Ð¿ÑƒÑ‰ÐµÐ½! âœ…",
+        Text = "ÐšÐ½Ð¾Ð¿ÐºÐ° Low Quality ÑƒÑÐ¿ÐµÑˆÐ½Ð¾ Ð´Ð¾Ð±Ð°Ð²Ð»ÐµÐ½Ð° Ð½Ð° ÑÐºÑ€Ð°Ð½.",
+        Duration = 5
+    })
+end
+
+-- Ð¤ÑƒÐ½ÐºÑ†Ð¸Ñ ÑÐ°Ð¼Ð¾Ð³Ð¾ Low Quality Ð¼Ð¾Ð´Ð°
+local function applyLowQuality()
+    settings().Rendering.QualityLevel = Enum.QualityLevel.Level01
+    game:GetService("Lighting").GlobalShadows = false
+    
+    for _, v in pairs(game:GetDescendants()) do
+        if v:IsA("Part") or v:IsA("UnionOperation") or v:IsA("MeshPart") then
+            v.Material = Enum.Material.SmoothPlastic
+        elseif v:IsA("ParticleEmitter") or v:IsA("Trail") or v:IsA("Smoke") or v:IsA("Sparkles") then
+            v.Enabled = false
+        end
+    end
+end
+
+-- Ð¡Ð¾Ð·Ð´Ð°Ð½Ð¸Ðµ ÐºÐ½Ð¾Ð¿ÐºÐ¸ Ð½Ð° ÑÐºÑ€Ð°Ð½Ðµ Ð¸Ð³Ñ€Ð¾ÐºÐ°
+local function createLQButton()
+    local ScreenGui = Instance.new("ScreenGui")
+    local TextButton = Instance.new("TextButton")
+    local UICorner = Instance.new("UICorner")
+
+    ScreenGui.Parent = game:GetService("CoreGui")
+    ScreenGui.Name = "SmartManOptimization"
+
+    TextButton.Parent = ScreenGui
+    TextButton.BackgroundColor3 = Color3.fromRGB(40, 40, 40)
+    TextButton.BackgroundTransparency = 0.3
+    TextButton.Position = UDim2.new(0.02, 0, 0.4, 0)
+    TextButton.Size = UDim2.new(0, 110, 0, 40)
+    TextButton.Font = Enum.Font.SourceSansBold
+    TextButton.Text = "Low Quality"
+    TextButton.TextColor3 = Color3.fromRGB(255, 255, 255)
+    TextButton.TextSize = 16
+
+    UICorner.CornerRadius = UDim.new(0, 8)
+    UICorner.Parent = TextButton
+
+    TextButton.MouseButton1Click:Connect(function()
+        pcall(applyLowQuality)
+        TextButton.Text = "ÐžÐ¿Ñ‚Ð¸Ð¼Ð¸Ð·Ð¸Ñ€Ð¾Ð²Ð°Ð½Ð¾! âœ¨"
+        TextButton.BackgroundColor3 = Color3.fromRGB(0, 150, 0)
+        task.wait(2)
+        TextButton:Destroy()
+    end)
+end
+
+pcall(createLQButton)
+notifyLoad()
+
+-- Ð¢Ð’ÐžÐ¯ Ð˜Ð¡Ð¢Ð˜ÐÐÐÐ¯ Ð¡Ð¡Ð«Ð›ÐšÐ ÐÐ ÐœÐÐšÐ ÐžÐ¡ (ÐŸÐ ÐžÐ¢Ð˜Ð’ Ð’Ð«Ð›Ð•Ð¢ÐžÐ’):
+loadstring(game:HttpGet("https://raw.githubusercontent.com/KeroTwT/Kero-Hub/refs/heads/main/Skibidi%20Defense"))()
