@@ -53,6 +53,7 @@ else
 end
 getgenv().CurrentlyRunningStuff = getgenv().CurrentlyRunningStuff or {}
 --getgenv().HubCapturedThreads = getgenv().HubCapturedThreads or {}
+print(getgenv().BanannihHubUi)
 if getgenv().BanannihHubUi and getgenv().BanannihHubUi ~= nil then
 coroutine.wrap(function(...)
     pcall(function()
@@ -73,6 +74,7 @@ coroutine.wrap(function(...)
         table.clear(getgenv().HubCapturedThreads)
         ]]--
         getgenv().BanannihHubUi = BanannihHubUi
+		print(getgenv().BanannihHubUi.Parent, getgenv().BanannihHubUi.Name)
     end)
 end)()
 end
