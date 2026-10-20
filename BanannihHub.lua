@@ -81,18 +81,20 @@ if BanannihHubUi.Enabled == false then BanannihHubUi.Enabled = true end
 local Main = BanannihHubUi.Main
 local TabList = Main.TabList
 local Elements = Main.Elements
-local ElementsList = Elements.TabList
+local Drag = Main.Drag
+--local ElementsList = Elements.TabList
+local CloseUIButton = Main.TextButton  -- Temporary
 local TabTemplates = TabList.Templates
-local ElementsTemplates = ElementsList.Templates
+local ElementsTemplates = Elements.Templates
 
-for _, v in ElementsList:GetChildren() do
-    if v:IsA("ImageLabel") then
+for _, v in Elements:GetChildren() do
+    if v:IsA("CanvasGroup") then
         v:Destroy()
     end
 end
 
 for _, v in TabList:GetChildren() do
-    if v:IsA("Frame") then
+    if v:IsA("TextButton") then
         if v.Name == "Placeholder" then
         else
             v:Destroy()
@@ -123,6 +125,48 @@ end
 local Exist = true
 local CurrentlyRunningStuff = getgenv().CurrentlyRunningStuff
 
+	
+--Drag ui stuff yeah
+local DRAG_TOGGLE = nil
+local DRAG_SPEED = 0.25
+local DRAG_START = nil
+local START_POS = nil
+
+local function updateInput(input)
+	local delta = input.Position - DRAG_START
+	local position = UDim2.new(
+		START_POS.X.Scale,
+		START_POS.X.Offset + delta.X,
+		START_POS.Y.Scale,
+		START_POS.Y.Offset + delta.Y
+	)
+	TweenService:Create(Main, TweenInfo.new(DRAG_SPEED, Enum.EasingStyle.Quint, Enum.EasingDirection.Out), {Position = position}):Play() -- Variant 1
+	--TweenService:Create(mainframe, TweenInfo.new(DRAG_SPEED, Enum.EasingStyle.Sine, Enum.EasingDirection.Out), {Position = position}):Play() -- Variant 2
+	--TweenService:Create(mainframe, TweenInfo.new(DRAG_SPEED, Enum.EasingStyle.Exponential, Enum.EasingDirection.Out), {Position = position}):Play() -- Variant 3
+end
+
+Drag.InputBegan:Connect(function(input)
+	if (input.UserInputType == Enum.UserInputType.MouseButton1 or input.UserInputType == Enum.UserInputType.Touch) then 
+		DRAG_TOGGLE = true
+		DRAG_START = input.Position
+		START_POS = Main.Position
+		input.Changed:Connect(function()
+			if input.UserInputState == Enum.UserInputState.End then
+				DRAG_TOGGLE = false
+			end
+		end)
+	end
+end)
+
+UIS.InputChanged:Connect(function(input)
+	if input.UserInputType == Enum.UserInputType.MouseMovement or input.UserInputType == Enum.UserInputType.Touch then
+		if DRAG_TOGGLE then
+			updateInput(input)
+		end
+	end
+end)
+-- Drag stuff yeah END
+
 
 function HubLibrary:CreateWindow(Settings)
     if HubLibrary.Theme[Settings.Theme] then 
@@ -148,9 +192,41 @@ function HubLibrary:CreateWindow(Settings)
         Tab.Title.Text = Name
         Tab.Visible = true
 
+		local CanvasList = ElementsTemplates:FindFirstChild("ExampleTabList"):Clone()
+		CanvasList.Name = Name.."TabList"
+		CanvasList.Parent = Elements
+
+		local List = CanvasList.List
+
 
         -- Tab
         local Tab = {}
+
+		-- Tab Switched
+		Tab.MouseButton1Click:Connect(function()
+			pcall(function()
+				for _, elem in Elements:GetChildren() do
+					task.spawn(function()
+						if elem:IsA("CanvasGroup") then
+							if elem.Name == CanvasList.Name and elem.Visible == true then
+							else
+								t:Create(elem, TweenInfo.new(0.3, Enum.EasingStyle.Exponential, Enum.EasingDirection.Out), {GroupColor3 = Color3.fromRGB(0,0,0)}):Play()
+								local waittween = t:Create(elem, TweenInfo.new(0.3, Enum.EasingStyle.Exponential, Enum.EasingDirection.Out), {GroupTransparency = 1})
+								waittween:Play()
+								waittween.Completed:Wait()
+								elem.Visible = false
+							end
+						end
+					end)
+				end
+				task.wait(0.3)
+				CanvasList.Visible = true
+				t:Create(CanvasList, TweenInfo.new(0.3, Enum.EasingStyle.Exponential, Enum.EasingDirection.Out), {GroupColor3 = Color3.fromRGB(255,255,255)}):Play()
+				local waittween = t:Create(CanvasList, TweenInfo.new(0.3, Enum.EasingStyle.Exponential, Enum.EasingDirection.Out), {GroupTransparency = 0})
+				waittween:Play()
+				waittween.Completed:Wait()
+			end)
+		end)
 
         -- Toggle
         function Tab:CreateToggle(ToggleSettings)
@@ -165,7 +241,7 @@ function HubLibrary:CreateWindow(Settings)
 			end
 
             local Toggle = ElementsTemplates:FindFirstChild("Toggle"):Clone()
-            Toggle.Parent = ElementsList
+            Toggle.Parent = List
             Toggle.Name = ToggleSettings.Name
             Toggle.Title.Text = ToggleSettings.Name
             Toggle.Visible = true
