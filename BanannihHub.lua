@@ -74,9 +74,11 @@ coroutine.wrap(function(...)
         table.clear(getgenv().HubCapturedThreads)
         ]]--
         getgenv().BanannihHubUi = BanannihHubUi
-		print(getgenv().BanannihHubUi.Parent, getgenv().BanannihHubUi.Name)
+		--print(getgenv().BanannihHubUi.Parent, getgenv().BanannihHubUi.Name)
     end)
 end)()
+else
+	getgenv().BanannihHubUi = BanannihHubUi
 end
 
 if BanannihHubUi.Enabled == false then BanannihHubUi.Enabled = true end
