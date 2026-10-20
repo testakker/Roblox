@@ -186,11 +186,11 @@ function HubLibrary:CreateWindow(Settings)
     local Window = {}
 
     function Window:CreateTab(Name, img)
-        local Tab = TabTemplates:FindFirstChild("Template"):Clone()
-        Tab.Parent = TabList
-        Tab.Name = Name
-        Tab.Title.Text = Name
-        Tab.Visible = true
+        local TabObj = TabTemplates:FindFirstChild("Template"):Clone()
+        TabObj.Parent = TabList
+        TabObj.Name = Name
+        TabObj.Title.Text = Name
+        TabObj.Visible = true
 
 		local CanvasList = ElementsTemplates:FindFirstChild("ExampleTabList"):Clone()
 		CanvasList.Name = Name.."TabList"
@@ -203,7 +203,7 @@ function HubLibrary:CreateWindow(Settings)
         local Tab = {}
 
 		-- Tab Switched
-		Tab.MouseButton1Click:Connect(function()
+		TabObj.MouseButton1Click:Connect(function()
 			pcall(function()
 				for _, elem in Elements:GetChildren() do
 					task.spawn(function()
