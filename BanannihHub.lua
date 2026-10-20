@@ -210,8 +210,8 @@ function HubLibrary:CreateWindow(Settings)
 						if elem:IsA("CanvasGroup") then
 							if elem.Name == CanvasList.Name and elem.Visible == true then
 							else
-								t:Create(elem, TweenInfo.new(0.3, Enum.EasingStyle.Exponential, Enum.EasingDirection.Out), {GroupColor3 = Color3.fromRGB(0,0,0)}):Play()
-								local waittween = t:Create(elem, TweenInfo.new(0.3, Enum.EasingStyle.Exponential, Enum.EasingDirection.Out), {GroupTransparency = 1})
+								TweenService:Create(elem, TweenInfo.new(0.3, Enum.EasingStyle.Exponential, Enum.EasingDirection.Out), {GroupColor3 = Color3.fromRGB(0,0,0)}):Play()
+								local waittween = TweenService:Create(elem, TweenInfo.new(0.3, Enum.EasingStyle.Exponential, Enum.EasingDirection.Out), {GroupTransparency = 1})
 								waittween:Play()
 								waittween.Completed:Wait()
 								elem.Visible = false
@@ -221,8 +221,8 @@ function HubLibrary:CreateWindow(Settings)
 				end
 				task.wait(0.3)
 				CanvasList.Visible = true
-				t:Create(CanvasList, TweenInfo.new(0.3, Enum.EasingStyle.Exponential, Enum.EasingDirection.Out), {GroupColor3 = Color3.fromRGB(255,255,255)}):Play()
-				local waittween = t:Create(CanvasList, TweenInfo.new(0.3, Enum.EasingStyle.Exponential, Enum.EasingDirection.Out), {GroupTransparency = 0})
+				TweenService:Create(CanvasList, TweenInfo.new(0.3, Enum.EasingStyle.Exponential, Enum.EasingDirection.Out), {GroupColor3 = Color3.fromRGB(255,255,255)}):Play()
+				local waittween = TweenService:Create(CanvasList, TweenInfo.new(0.3, Enum.EasingStyle.Exponential, Enum.EasingDirection.Out), {GroupTransparency = 0})
 				waittween:Play()
 				waittween.Completed:Wait()
 			end)
