@@ -158,7 +158,7 @@ Drag.InputBegan:Connect(function(input)
 	end
 end)
 
-UIS.InputChanged:Connect(function(input)
+UserInputService.InputChanged:Connect(function(input)
 	if input.UserInputType == Enum.UserInputType.MouseMovement or input.UserInputType == Enum.UserInputType.Touch then
 		if DRAG_TOGGLE then
 			updateInput(input)
