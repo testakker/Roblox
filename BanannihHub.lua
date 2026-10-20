@@ -53,7 +53,7 @@ else
 end
 getgenv().CurrentlyRunningStuff = getgenv().CurrentlyRunningStuff or {}
 --getgenv().HubCapturedThreads = getgenv().HubCapturedThreads or {}
-print(getgenv().BanannihHubUi)
+--print(getgenv().BanannihHubUi)
 if getgenv().BanannihHubUi and getgenv().BanannihHubUi ~= nil then
 coroutine.wrap(function(...)
     pcall(function()
@@ -171,7 +171,7 @@ UserInputService.InputChanged:Connect(function(input)
 end)
 -- Drag stuff yeah END
 
-
+local IsThisTabFirstToBeCreated = true
 function HubLibrary:CreateWindow(Settings)
     if HubLibrary.Theme[Settings.Theme] then 
         SelectedTheme = HubLibrary.Theme[Settings.Theme]
@@ -186,7 +186,6 @@ function HubLibrary:CreateWindow(Settings)
     end
 
     -- Window
-    local FirstTab = false
     local Window = {}
 
     function Window:CreateTab(Name, img)
@@ -198,7 +197,13 @@ function HubLibrary:CreateWindow(Settings)
 
 		local CanvasList = ElementsTemplates:FindFirstChild("ExampleTabList"):Clone()
 		CanvasList.Name = Name.."TabList"
+		CanvasList.Visible = false
 		CanvasList.Parent = Elements
+		if IsThisTabFirstToBeCreated == true then
+			IsThisTabFirstToBeCreated = false
+			CanvasList.Visible = true
+		end
+			
 
 		local List = CanvasList.List
 
