@@ -156,10 +156,12 @@ function HubLibrary:CreateWindow(Settings)
         function Tab:CreateToggle(ToggleSettings)
             local ToggleValue = {}
             -- Doing this, so if ToggleSettings.CurrentValue is alredy True, it will execute code inside Callback func
-            local success, response = pcall(function() 
-                local anothercall = task.spawn(function() ToggleSettings.Callback(ToggleSettings.CurrentValue) end)
-                table.insert(CurrentlyRunningStuff, anothercall) -- PLEASE remember and ADD a feature in setting that lets you disable currently running functions if they were running but plr setted toggle val to false
-            end)
+			if ToggleSettings.CurrentValue == true then
+	            local success, response = pcall(function() 
+	                local anothercall = task.spawn(function() ToggleSettings.Callback(ToggleSettings.CurrentValue) end)
+	                table.insert(CurrentlyRunningStuff, anothercall) -- PLEASE remember and ADD a feature in setting that lets you disable currently running functions if they were running but plr setted toggle val to false
+	            end)
+			end
 
             local Toggle = ElementsTemplates:FindFirstChild("Toggle"):Clone()
             Toggle.Parent = ElementsList
