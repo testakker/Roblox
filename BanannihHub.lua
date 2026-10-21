@@ -86,8 +86,9 @@ local Main = BanannihHubUi.Main
 local TabList = Main.TabList
 local Elements = Main.Elements
 local Drag = Main.Drag
---local ElementsList = Elements.TabList
-local CloseUIButton = Main.TextButton  -- Temporary
+local Notice = BanannihHubUi.Notice
+local HideHubButton = Main.HideHub.ActualButton -- I am LAZY to redo and make it look better, just ignore this shit, man
+local CloseUIButton = Main.CloseHub
 local TabTemplates = TabList.Templates
 local ElementsTemplates = Elements.Templates
 
@@ -129,7 +130,60 @@ end
 local Exist = true
 local CurrentlyRunningStuff = getgenv().CurrentlyRunningStuff
 
-	
+
+-- Hide AND Close Hub Ui stuff yeah
+local UIposBeforeClosing = nil
+local animating = false
+
+local function CloseUi()
+	animating = true
+	UIposBeforeClosing = Main.Position
+	TweenService:Create(Main, TweenInfo.new(0.3, Enum.EasingStyle.Exponential, Enum.EasingDirection.Out), {Position = Main.Position + UDim2.new(0,0,0.1,0)}):Play()
+	TweenService:Create(Main, TweenInfo.new(0.3, Enum.EasingStyle.Exponential, Enum.EasingDirection.Out), {GroupColor3 = Color3.fromRGB(0,0,0)}):Play()
+	local waittween = TweenService:Create(Main, TweenInfo.new(0.3, Enum.EasingStyle.Exponential, Enum.EasingDirection.Out), {GroupTransparency = 1})
+	waittween:Play()
+	waittween.Completed:Wait()
+	mainframe.Visible = false
+	animating = false
+	Notice.Visible = true
+end
+
+local function OpenUi()
+	Notice.Visible = false
+	animating = true
+	mainframe.Visible = true
+	TweenService:Create(Main, TweenInfo.new(0.3, Enum.EasingStyle.Exponential, Enum.EasingDirection.Out), {Position = UIposBeforeClosing}):Play()
+	TweenService:Create(Main, TweenInfo.new(0.3, Enum.EasingStyle.Exponential, Enum.EasingDirection.Out), {GroupColor3 = Color3.fromRGB(255,255,255)}):Play()
+	local waittween = TweenService:Create(Main, TweenInfo.new(0.3, Enum.EasingStyle.Exponential, Enum.EasingDirection.Out), {GroupTransparency = 0})
+	waittween:Play()
+	waittween.Completed:Wait()
+	animating = false
+end
+
+CloseUIButton.MouseButton1Click:Connect(function()
+	-- Do some stuff yk yk
+	Notice.TextLabel.Text = "You<b>closed</b>Bunannih Hub, execute hub script<b>again</b>if it was a mistake"
+	Notice.Visible = true
+	animating = true
+	UIposBeforeClosing = Main.Position
+	TweenService:Create(Main, TweenInfo.new(0.3, Enum.EasingStyle.Exponential, Enum.EasingDirection.Out), {Position = Main.Position + UDim2.new(0,0,0.1,0)}):Play()
+	TweenService:Create(Main, TweenInfo.new(0.3, Enum.EasingStyle.Exponential, Enum.EasingDirection.Out), {GroupColor3 = Color3.fromRGB(0,0,0)}):Play()
+	local waittween = TweenService:Create(Main, TweenInfo.new(0.3, Enum.EasingStyle.Exponential, Enum.EasingDirection.Out), {GroupTransparency = 1})
+	waittween:Play()
+	waittween.Completed:Wait()
+	mainframe.Visible = false
+	animating = false
+	Notice.Visible = true
+end)
+
+HideHubButton.MouseButton1Click:Connect(function()
+	if not animating then
+		if mainframe.Visible then
+			CloseUi()
+		end
+	end
+end)
+
 --Drag ui stuff yeah
 local DRAG_TOGGLE = nil
 local DRAG_SPEED = 0.25
@@ -167,9 +221,19 @@ UserInputService.InputChanged:Connect(function(input)
 		if DRAG_TOGGLE then
 			updateInput(input)
 		end
+	elseif input.KeyCode == Enum.KeyCode.RightControl then
+		if not animating then
+			if mainframe.Visible then
+				CloseUi()
+			else
+				OpenUi()
+			end
+		end 
 	end
 end)
 -- Drag stuff yeah END
+
+-- Hide AND Close Hub Ui stuff yeah END
 
 local IsThisTabFirstToBeCreated = true
 function HubLibrary:CreateWindow(Settings)
