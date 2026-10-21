@@ -220,19 +220,22 @@ UserInputService.InputChanged:Connect(function(input)
 	if input.UserInputType == Enum.UserInputType.MouseMovement or input.UserInputType == Enum.UserInputType.Touch then
 		if DRAG_TOGGLE then
 			updateInput(input)
-		end
-	elseif input.KeyCode == Enum.KeyCode.RightControl then
+		end 
+	end
+end)
+-- Drag stuff yeah END
+
+UserInputService.InputBegan:Connect(function(input)
+	if input.KeyCode == Enum.KeyCode.RightControl then
 		if not animating then
 			if Main.Visible then
 				CloseUi()
 			else
 				OpenUi()
 			end
-		end 
+		end
 	end
 end)
--- Drag stuff yeah END
-
 -- Hide AND Close Hub Ui stuff yeah END
 
 local IsThisTabFirstToBeCreated = true
