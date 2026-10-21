@@ -82,7 +82,7 @@ else
 end
 
 if BanannihHubUi.Enabled == false then BanannihHubUi.Enabled = true end
-BanannihHubUi.ZIndexBehavior == Enum.ZIndexBehavior.Sibling -- Ik it will be this by default, but just to be safe
+BanannihHubUi.ZIndexBehavior = Enum.ZIndexBehavior.Sibling -- Ik it will be this by default, but just to be safe
 local Main = BanannihHubUi.Main
 local TabList = Main.TabList
 local Elements = Main.Elements
