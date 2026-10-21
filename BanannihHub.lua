@@ -147,6 +147,8 @@ local function CloseUi()
 	Main.Visible = false
 	animating = false
 	Notice.Visible = true
+	task.wait(2)
+	if Notice.Visible == true then Notice.Visible = false end
 end
 
 local function OpenUi()
@@ -175,6 +177,9 @@ CloseUIButton.MouseButton1Click:Connect(function()
 	Main.Visible = false
 	animating = false
 	Notice.Visible = true
+	task.wait(2)
+	getgenv().BanannihHubUi = nil
+	BanannihHubUi:Destroy()
 end)
 
 HideHubButton.MouseButton1Click:Connect(function()
