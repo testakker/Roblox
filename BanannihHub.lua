@@ -82,6 +82,7 @@ else
 end
 
 if BanannihHubUi.Enabled == false then BanannihHubUi.Enabled = true end
+BanannihHubUi.ZIndexBehavior == Enum.ZIndexBehavior.Sibling -- Ik it will be this by default, but just to be safe
 local Main = BanannihHubUi.Main
 local TabList = Main.TabList
 local Elements = Main.Elements
@@ -239,6 +240,7 @@ end)
 -- Hide AND Close Hub Ui stuff yeah END
 
 local IsThisTabFirstToBeCreated = true
+local CurrentAnimatedTab = nil
 function HubLibrary:CreateWindow(Settings)
     if HubLibrary.Theme[Settings.Theme] then 
         SelectedTheme = HubLibrary.Theme[Settings.Theme]
@@ -281,10 +283,11 @@ function HubLibrary:CreateWindow(Settings)
 		-- Tab Switched
 		TabObj.MouseButton1Click:Connect(function()
 			pcall(function()
+				CurrentAnimatedTab = CanvasList
 				for _, elem in Elements:GetChildren() do
 					task.spawn(function()
 						if elem:IsA("CanvasGroup") then
-							if elem.Name == CanvasList.Name and elem.Visible == true then
+							if elem.Name == CanvasList.Name and (elem.Visible == true or CurrentAnimatedTab == elem)  then
 							else
 								TweenService:Create(elem, TweenInfo.new(0.3, Enum.EasingStyle.Exponential, Enum.EasingDirection.Out), {GroupColor3 = Color3.fromRGB(0,0,0)}):Play()
 								local waittween = TweenService:Create(elem, TweenInfo.new(0.3, Enum.EasingStyle.Exponential, Enum.EasingDirection.Out), {GroupTransparency = 1})
