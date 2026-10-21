@@ -162,7 +162,7 @@ end
 
 CloseUIButton.MouseButton1Click:Connect(function()
 	-- Do some stuff yk yk
-	Notice.TextLabel.Text = "You<b>closed</b>Bunannih Hub, execute hub script<b>again</b>if it was a mistake"
+	Notice.TextLabel.Text = "You <b>closed</b> Bunannih Hub, execute hub script <b>again</b> if it was a mistake"
 	Notice.Visible = true
 	animating = true
 	UIposBeforeClosing = Main.Position
