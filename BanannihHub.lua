@@ -143,7 +143,7 @@ local function CloseUi()
 	local waittween = TweenService:Create(Main, TweenInfo.new(0.3, Enum.EasingStyle.Exponential, Enum.EasingDirection.Out), {GroupTransparency = 1})
 	waittween:Play()
 	waittween.Completed:Wait()
-	mainframe.Visible = false
+	Main.Visible = false
 	animating = false
 	Notice.Visible = true
 end
@@ -151,7 +151,7 @@ end
 local function OpenUi()
 	Notice.Visible = false
 	animating = true
-	mainframe.Visible = true
+	Main.Visible = true
 	TweenService:Create(Main, TweenInfo.new(0.3, Enum.EasingStyle.Exponential, Enum.EasingDirection.Out), {Position = UIposBeforeClosing}):Play()
 	TweenService:Create(Main, TweenInfo.new(0.3, Enum.EasingStyle.Exponential, Enum.EasingDirection.Out), {GroupColor3 = Color3.fromRGB(255,255,255)}):Play()
 	local waittween = TweenService:Create(Main, TweenInfo.new(0.3, Enum.EasingStyle.Exponential, Enum.EasingDirection.Out), {GroupTransparency = 0})
@@ -171,14 +171,14 @@ CloseUIButton.MouseButton1Click:Connect(function()
 	local waittween = TweenService:Create(Main, TweenInfo.new(0.3, Enum.EasingStyle.Exponential, Enum.EasingDirection.Out), {GroupTransparency = 1})
 	waittween:Play()
 	waittween.Completed:Wait()
-	mainframe.Visible = false
+	Main.Visible = false
 	animating = false
 	Notice.Visible = true
 end)
 
 HideHubButton.MouseButton1Click:Connect(function()
 	if not animating then
-		if mainframe.Visible then
+		if Main.Visible then
 			CloseUi()
 		end
 	end
@@ -199,8 +199,8 @@ local function updateInput(input)
 		START_POS.Y.Offset + delta.Y
 	)
 	TweenService:Create(Main, TweenInfo.new(DRAG_SPEED, Enum.EasingStyle.Quint, Enum.EasingDirection.Out), {Position = position}):Play() -- Variant 1
-	--TweenService:Create(mainframe, TweenInfo.new(DRAG_SPEED, Enum.EasingStyle.Sine, Enum.EasingDirection.Out), {Position = position}):Play() -- Variant 2
-	--TweenService:Create(mainframe, TweenInfo.new(DRAG_SPEED, Enum.EasingStyle.Exponential, Enum.EasingDirection.Out), {Position = position}):Play() -- Variant 3
+	--TweenService:Create(Main, TweenInfo.new(DRAG_SPEED, Enum.EasingStyle.Sine, Enum.EasingDirection.Out), {Position = position}):Play() -- Variant 2
+	--TweenService:Create(Main, TweenInfo.new(DRAG_SPEED, Enum.EasingStyle.Exponential, Enum.EasingDirection.Out), {Position = position}):Play() -- Variant 3
 end
 
 Drag.InputBegan:Connect(function(input)
@@ -223,7 +223,7 @@ UserInputService.InputChanged:Connect(function(input)
 		end
 	elseif input.KeyCode == Enum.KeyCode.RightControl then
 		if not animating then
-			if mainframe.Visible then
+			if Main.Visible then
 				CloseUi()
 			else
 				OpenUi()
