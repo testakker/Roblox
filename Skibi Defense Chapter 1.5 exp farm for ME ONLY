@@ -19,8 +19,7 @@ local ss, err = pcall(function()
         until ss == true
     end
 
-	task.wait(2)
-
+	game:GetService("Players").LocalPlayer.CharacterAdded:Wait()
     const function getservice(name)
     local service = game:GetService(name)
     return if cloneref then cloneref(service) else service end
