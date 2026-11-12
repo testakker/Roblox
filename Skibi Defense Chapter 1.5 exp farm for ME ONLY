@@ -1,0 +1,146 @@
+    local ss, err = pcall(function()
+        const Event = game:GetService("ReplicatedStorage").GAME_START.readyButton
+        Event:FireServer(
+            true
+        )
+    end)
+
+    if ss == false then
+        repeat 
+            ss, err = pcall(function()
+                const Event = game:GetService("ReplicatedStorage").GAME_START.readyButton
+                Event:FireServer(
+                    true
+                )
+            end)
+            task.wait(2)
+        until ss == true
+    end
+
+    const function getservice(name)
+    local service = game:GetService(name)
+    return if cloneref then cloneref(service) else service end
+
+    const Workspace = getservice("Workspace")
+    const Players = getservice("Players")
+    const LocalPlayer = Players.LocalPlayer
+    const ReplicatedStorage = getservice("ReplicatedStorage")
+
+    const Event = ReplicatedStorage:FindFirstChild("Event")
+
+    const GameSpeedChange = ReplicatedStorage.Game.Speed.Change
+    const PlaceTowerEvent = Event.placeTower
+    const UpgradeTowerEvent = Event.UpgradeTower
+    const WaveSkipEvent = Event.waveSkip
+    const ReplayCoreEvent = Event.ReplayCore
+
+    --DancingCameraman
+    const PlaceTowerPositionTable = {
+        ["DancingCameraman"] = {
+            [1] = CFrame.new(-463.346, -300.155, 107.773, 1, 0, 0, 0, 1, 0, 0, 0, 1),
+            [2] = CFrame.new(-463.346, -300.155, 109.943, 1, 0, 0, 0, 1, 0, 0, 0, 1),
+            [3] = CFrame.new(-463.346, -300.155, 112.08, 1, 0, 0, 0, 1, 0, 0, 0, 1),
+            [4] = CFrame.new(-463.346, -300.155, 114.158, 1, 0, 0, 0, 1, 0, 0, 0, 1),
+            [5] = CFrame.new(-463.346, -300.155, 116.249, 1, 0, 0, 0, 1, 0, 0, 0, 1),
+            [6] = CFrame.new(-465.435, -300.155, 107.773, 1, 0, 0, 0, 1, 0, 0, 0, 1),
+            [7] = CFrame.new(-465.435, -300.155, 109.943, 1, 0, 0, 0, 1, 0, 0, 0, 1),
+            [8] = CFrame.new(-465.435, -300.155, 112.08, 1, 0, 0, 0, 1, 0, 0, 0, 1),
+            [9] = CFrame.new(-465.435, -300.155, 114.158, 1, 0, 0, 0, 1, 0, 0, 0, 1),
+            [10] = CFrame.new(-465.435, -300.155, 116.249, 1, 0, 0, 0, 1, 0, 0, 0, 1)
+        },
+        ["AstroUpgradedCameraman"] = {
+            [1] = CFrame.new(-463.333, -300.155, 105.451, 1, 0, 0, 0, 1, 0, 0, 0, 1),
+            [2] = CFrame.new(-463.333, -300.155, 103.332, 1, 0, 0, 0, 1, 0, 0, 0, 1),
+            [3] = CFrame.new(-463.333, -300.155, 101.213, 1, 0, 0, 0, 1, 0, 0, 0, 1),
+            [4] = CFrame.new(-465.333, -300.155, 105.451, 1, 0, 0, 0, 1, 0, 0, 0, 1),
+            [5] = CFrame.new(-465.333, -300.155, 103.332, 1, 0, 0, 0, 1, 0, 0, 0, 1),
+            [6] = CFrame.new(-465.333, -300.155, 101.213, 1, 0, 0, 0, 1, 0, 0, 0, 1)
+        },
+        ["DJ"] = {[1] = CFrame.new(-469.1337890625, -300.15478515625, 76.087944030761719, 1, 0, 0, 0, 1, 0, 0, 0, 1)}
+    }
+
+    const function PlaceTower(name)
+        const Table = PlaceTowerPositionTable[name]
+        for Index, Value in Table do
+            PlaceTowerEvent:FireServer(
+                name,
+                Value,
+                false
+            )
+            task.wait()
+        end
+    end
+
+
+    PlaceTower("DancingCameraman")
+
+    UpgradeTowerEvent:FireServer("1")
+    UpgradeTowerEvent:FireServer("2")
+    GameSpeedChange:FireServer(3)
+
+    task.spawn(function()
+    while task.wait(0.1) do
+    WaveSkipEvent:FireServer(
+        true
+    )
+    end
+    end)
+
+    WaveSkipEvent.OnClientEvent:Connect(function(wavenum, bool)
+        if bool == false then
+        task.wait(1)
+        if wavenum == 2 then
+            for i=1, 4, 1 do
+                PlaceTowerEvent:FireServer("AstroUpgradedCameraman", PlaceTowerPositionTable["AstroUpgradedCameraman"][i], false)
+            end
+        elseif wavenum == 3 then
+            for i=1, 2, 1 do
+                PlaceTowerEvent:FireServer("AstroUpgradedCameraman", PlaceTowerPositionTable["AstroUpgradedCameraman"][i+4], false) -- i+4 bc we want to place tower 5 next, not 1
+            end
+
+            for i = 3, 10, 1 do -- why are we starting here from 3, and not 1? idk, why not?
+                UpgradeTowerEvent:FireServer(tostring(i))
+            end
+
+            for i = 1, 9, 1 do
+                UpgradeTowerEvent:FireServer(tostring(i))
+            end
+
+        elseif wavenum == 4 then
+            PlaceTowerEvent:FireServer("DJ", PlaceTowerPositionTable["DJ"][1], false)
+            UpgradeTowerEvent:FireServer("17")
+            UpgradeTowerEvent:FireServer("1")
+            UpgradeTowerEvent:FireServer("10")
+        elseif wavenum == 5 then
+            UpgradeTowerEvent:FireServer("17")
+            for i = 1, 10, 1 do
+                UpgradeTowerEvent:FireServer(tostring(i))
+            end
+            UpgradeTowerEvent:FireServer("2")
+        elseif wavenum == 6 then
+            UpgradeTowerEvent:FireServer("17")
+            for i = 3, 10, 1 do -- why are we starting here from 3, and not 1? idk, why not?
+                UpgradeTowerEvent:FireServer(tostring(i))
+            end
+            for i = 11, 16, 1 do -- why are we starting here from 11, and not 1? idk, why not?
+                UpgradeTowerEvent:FireServer(tostring(i))
+            end
+
+            UpgradeTowerEvent:FireServer("11")
+        elseif wavenum == 7 then
+            for i = 11, 16, 1 do -- why are we starting here from 11, and not 1? idk, why not?
+                UpgradeTowerEvent:FireServer(tostring(i))
+            end
+            for i = 11, 16, 1 do -- why are we starting here from 12, and not 1? idk, why not?
+                UpgradeTowerEvent:FireServer(tostring(i))
+            end
+        end
+
+        end
+    end)
+
+    ReplayCoreEvent.OnClientEvent:Connect(function()
+    ReplayCoreEvent:FireServer()
+    end)
+
+    
