@@ -138,6 +138,11 @@ local ss, err = pcall(function()
             for i = 11, 16, 1 do -- why are we starting here from 12, and not 1? idk, why not?
                 UpgradeTowerEvent:FireServer(tostring(i))
             end
+			for amount = 3-1, 0, -1 do
+				for i = 11, 16, 1 do -- why are we starting here from 11, and not 1? idk, why not?
+                	UpgradeTowerEvent:FireServer(tostring(i))
+            	end
+			end
         end
 
         end
